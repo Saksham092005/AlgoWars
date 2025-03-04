@@ -1,0 +1,32 @@
+<!-- frontend/views/login.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Devbits - Sign In</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+  <%- include('partials/header') %>
+
+  <div class="form-container">
+    <h2>Sign In</h2>
+    <form action="/login" method="POST">
+      <label for="email">Email</label>
+      <input type="email" name="email" id="email" required>
+
+      <label for="password">Password</label>
+      <input type="password" name="password" id="password" required>
+
+      <button type="submit" class="btn-green">Sign In</button>
+    </form>
+    <p>Don't have an account? <a href="/register">Sign Up</a></p>
+    <p><a href="/auth/google" class="btn-google">Sign in with Google</a></p>
+   
+  </div>
+
+  <%- include('partials/footer') %>
+
+</body>
+</html>

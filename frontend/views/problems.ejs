@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Devbits - Problem Set</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+  <!-- Include Navbar -->
+  <%- include('partials/header') %>
+
+  <div class="container">
+    <h1>Problem Set</h1>
+    
+    <!-- Filter form -->
+    <form action="/problems" method="GET" class="filter-form">
+      <label for="rating">Rating:</label>
+      <input type="text" name="rating" id="rating" value="<%= ratingFilter %>">
+      
+      <label for="tag">Tag:</label>
+      <input type="text" name="tag" id="tag" value="<%= tagFilter %>">
+      
+      <button type="submit" class="btn-green">Filter</button>
+    </form>
+
+    <ul class="problems-list">
+      <% problems.forEach(problem => { %>
+        <li>
+          <!-- Construct the URL for a Codeforces problem -->
+          <a href="https://codeforces.com/problemset/problem/<%= problem.contestId %>/<%= problem.index %>" target="_blank">
+            <%= problem.name %>
+          </a>
+          <% if (problem.rating) { %>
+            <span> - Rating: <%= problem.rating %></span>
+          <% } %>
+          <% if (problem.tags) { %>
+            <div class="tags">Tags:
+              <% problem.tags.forEach(tag => { %>
+                <span class="tag"><%= tag %></span>
+              <% }) %>
+            </div>
+          <% } %>
+        </li>
+      <% }) %>
+    </ul>
+  </div>
+
+  <!-- Include Footer -->
+  <%- include('partials/footer') %>
+
+</body>
+</html>

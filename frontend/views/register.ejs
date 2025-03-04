@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Devbits - Sign Up</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+  <!-- Show an alert if the user is not registered -->
+  <% if (error === "not_registered") { %>
+      <script>
+          alert("You are not registered! Please sign up first.");
+      </script>
+  <% } %>
+
+  <%- include('partials/header') %>
+
+  <div class="form-container">
+    <h2>Create an Account</h2>
+    <form action="/register" method="POST">
+      <label for="username">Username</label>
+      <input type="text" name="username" id="username" required>
+
+      <label for="email">Email</label>
+      <input type="email" name="email" id="email" required>
+
+      <label for="password">Password</label>
+      <input type="password" name="password" id="password" required>
+
+      <label for="codeforcesHandle">Codeforces Handle</label>
+      <input type="text" name="codeforcesHandle" id="codeforcesHandle" required>
+
+      <button type="submit" class="btn-green">Sign Up</button>
+    </form>
+    <p>Already have an account? <a href="/login">Sign In</a></p>
+  </div>
+
+  <%- include('partials/footer') %>
+
+</body>
+</html>

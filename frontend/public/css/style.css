@@ -1,0 +1,253 @@
+/* frontend/public/css/style.css */
+
+/* Basic Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: "Open Sans", sans-serif;
+    color: #1C2B2D; /* Dark color for text */
+    
+    background: linear-gradient(to right, #f8f9fa, #afc6dd);
+  }
+  
+  /* Navbar */
+  .navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #1C2B2D; /* Dark background */
+    padding: 1rem 2rem;
+  }
+  
+  .navbar a {
+    color: #FFFFFF;
+    text-decoration: none;
+    margin-left: 1rem;
+  }
+  
+  .btn-green {
+    background-color: #2BAF67; /* Accent green */
+    color: #FFFFFF;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: 600;
+  }
+  
+  /* Hero Section */
+  .hero {
+    height: 80vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 2rem;
+    background: linear-gradient(to right, #f8f9fa, #afc6dd);
+  }
+  
+  .hero h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+  }
+  
+  .hero p {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+  }
+  
+  /* Form Container */
+  .form-container {
+    max-width: 400px;
+    margin: 3rem auto;
+    background-color: #F5F5F5;
+    padding: 2rem;
+    border-radius: 8px;
+  }
+  
+  .form-container h2 {
+    margin-bottom: 1rem;
+    color: #1C2B2D;
+  }
+  
+  .form-container label {
+    display: block;
+    margin: 0.5rem 0 0.25rem;
+  }
+  
+  .form-container input {
+    width: 100%;
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  /* Footer */
+  .footer {
+    background-color: #1C2B2D;
+    color: #FFFFFF;
+    text-align: center;
+    padding: 1rem;
+    margin-top: 2rem;
+  }
+  .btn-google {
+    background-color: #db4437; /* Google red */
+    color: #FFFFFF;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: 600;
+    margin-left: 1rem;
+    transition: background-color 0.3s ease;
+  }
+  
+  .btn-google:hover {
+    background-color: #c33d2f;
+  }
+/* Fade-in animation for hero section */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  
+  .hero {
+    animation: fadeIn 1.5s ease-in;
+    /* existing styles... */
+  }
+    
+
+
+
+
+
+/* problems page */
+
+
+.container {
+  max-width: 900px;
+  margin: 3rem auto;
+  padding: 2rem;
+  /* Subtle white gradient for container */
+  background: linear-gradient(135deg, #ffffff, #f9f9f9);
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Page Title */
+h1 {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  color: #1C2B2D;
+}
+
+/* Filter Form Styling */
+.filter-form {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  /* Soft blue gradient for the filter area */
+  background: linear-gradient(135deg, #f6f9fc, #e9f0f5);
+  border-radius: 8px;
+}
+
+.filter-form label {
+  font-weight: bold;
+  color: #333;
+}
+
+.filter-form input {
+  padding: 0.6rem;
+  width: 120px;
+  border: 2px solid #ccc;
+  border-radius: 5px;
+  font-size: 1rem;
+  background-color: #fff;
+}
+
+.filter-form button {
+  /* Gradient green button */
+  background: linear-gradient(45deg, #2BAF67, #3ac16c);
+  color: white;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  font-size: 1rem;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background 0.3s ease;
+}
+
+.filter-form button:hover {
+  background: linear-gradient(45deg, #279d5f, #32b461);
+}
+
+/* Problems List */
+.problems-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 0;
+}
+
+/* Individual Problem Card */
+.problems-list li {
+  list-style: none;
+  padding: 1rem;
+  /* Light gradient for cards */
+  background: linear-gradient(135deg, #fff, #fefefe);
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.problems-list li:hover {
+  transform: scale(1.02);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+/* Problem Link Styling */
+.problems-list a {
+  font-size: 1.2rem;
+  font-weight: bold;
+  text-decoration: none;
+  color: #1C2B2D;
+  transition: color 0.3s ease;
+}
+
+.problems-list a:hover {
+  color: #2BAF67;
+  text-decoration: underline;
+}
+
+/* Additional Info Styling */
+.problems-list span {
+  font-size: 1rem;
+  font-weight: normal;
+  color: #555;
+}
+
+/* Tags Styling */
+.tags {
+  margin-top: 0.5rem;
+}
+
+.tag {
+  display: inline-block;
+  background-color: #e4ebf5;
+  padding: 0.3rem 0.6rem;
+  border-radius: 5px;
+  margin-right: 0.3rem;
+  font-size: 0.9rem;
+  font-weight: bold;
+  color: #333;
+  text-transform: capitalize;
+}
+  

@@ -1,0 +1,17 @@
+<nav class="navbar">
+  <div class="navbar-brand">
+    <a href="/">AlgoWars</a>
+  </div>
+  <div class="navbar-links">
+    <% if (user) { %>
+      <!-- If user is logged in, show logout option -->
+      <a href="/logout" class="btn-green">Logout</a>
+      <% } else { %>
+        <a href="/dashboard">Profile</a>
+        <a href="/problems">Problems</a>
+        <a href="/login">Sign In</a>
+        <a href="/register" class="btn-green">Sign Up</a>
+        <a href="/auth/google" class="btn-google">Sign in with Google</a>
+        <% } %>
+  </div>
+</nav>
