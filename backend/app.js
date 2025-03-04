@@ -1,5 +1,6 @@
 // backend/app.js
 const express = require('express');
+const app = express();
 const path = require('path');
 const connectDB = require('./config/database');
 const indexRoutes = require('./routes/index');
@@ -8,11 +9,18 @@ const session = require('express-session');
 const passport = require('./config/passport'); // our configured passport
 const problemsRoutes = require('./routes/problems');
 const cookieParser = require('cookie-parser');
+
 const dashboardRouter = require('./routes/dashboard');
 const jwt = require('jsonwebtoken');
 
+const http = require('http');
+const socketio = require('socket.io');
+const server = http.createServer(app);
+const io = socketio(server);
+const contestRoutes = require('./routes/contests');
 
-const app = express();
+
+
 
 // Connect to MongoDB
 connectDB();
@@ -21,6 +29,8 @@ connectDB();
 // We assume that "views" directory is in ../frontend/views
 app.set('views', path.join(__dirname, '../frontend/views'));
 app.set('view engine', 'ejs');
+app.set('io', io);
+app.use(express.static(path.join(__dirname, '../frontend/public')));
 
 
 
@@ -70,7 +80,45 @@ app.use(passport.session());
 app.use('/', indexRoutes);
 app.use('/', authRoutes);
 app.use('/', problemsRoutes);
+
 app.use('/', dashboardRouter);
+
+app.use('/', contestRoutes);
+
+// Socket.io connection handling
+io.on('connection', (socket) => {
+  console.log('New client connected');
+  socket.on('joinContest', (contestId) => {
+    socket.join(`contest_${contestId}`);
+    console.log(`Socket joined room: contest_${contestId}`);
+  });
+});
+
+
+
+// Leaderboard simulation: every 10 seconds, update leaderboard for live contests
+const Contest = require('./models/Contest');
+function computeLeaderboard(contest) {
+  // For demo purposes, assign random scores to each participant.
+  const leaderboard = contest.participants.map(participant => ({
+    userId: participant,
+    score: Math.floor(Math.random() * 100)
+  }));
+  leaderboard.sort((a, b) => b.score - a.score);
+  return leaderboard;
+}
+
+setInterval(async () => {
+  // Here, we find a live contest (for demo, simply get one contest; you may need proper criteria)
+  const contest = await Contest.findOne({ startTime: { $ne: null } });
+  if (contest) {
+    const leaderboard = computeLeaderboard(contest);
+    io.to(`contest_${contest._id}`).emit('leaderboardUpdate', leaderboard);
+  }
+}, 10000);
+
+
+
 
 
 

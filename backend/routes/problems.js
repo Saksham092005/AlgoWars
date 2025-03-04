@@ -27,7 +27,7 @@ router.get('/problems', async (req, res) => {
     problems.sort((a, b) => (b.contestId || 0) - (a.contestId || 0));
 
     // Optionally, limit the number of displayed problems (e.g., 50)
-    problems = problems.slice(0, 50);
+    problems = problems.slice(0, 150);
 
     // Render the problems template, passing along filters for display
     res.render('problems', { 

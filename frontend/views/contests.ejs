@@ -1,0 +1,66 @@
+<!-- frontend/views/contests.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Devbits - Contests</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/contests.css">
+</head>
+<body>
+  <%- include('partials/header') %>
+  <div class="container contests-page">
+    <!-- Left Column: Contest Listings -->
+    <div class="contests-list">
+      <h1>Codeforces Contests</h1>
+      
+      <section class="upcoming">
+        <h2>Upcoming Contests</h2>
+        <ul class="contest-list">
+          <% upcomingContests.forEach(contest => { %>
+            <li>
+              <a href="https://codeforces.com/contest/<%= contest.id %>" target="_blank">
+                <%= contest.name %>
+              </a>
+              <span> | Starts at: <%= new Date(contest.startTimeSeconds * 1000).toLocaleString() %></span>
+            </li>
+          <% }) %>
+        </ul>
+      </section>
+      
+      <section class="past">
+        <h2>Past Contests</h2>
+        <ul class="contest-list">
+          <% pastContests.forEach(contest => { %>
+            <li>
+              <a href="https://codeforces.com/contest/<%= contest.id %>" target="_blank">
+                <%= contest.name %>
+              </a>
+              <span> | Ended at: <%= new Date(contest.startTimeSeconds * 1000).toLocaleString() %></span>
+            </li>
+          <% }) %>
+        </ul>
+      </section>
+
+      <!-- Pagination Section -->
+      <div class="pagination">
+        <% if (currentPage > 1) { %>
+          <a href="/contests?page=<%= currentPage - 1 %>" class="pagination-link">Previous</a>
+        <% } %>
+        <span class="pagination-info">Page <%= currentPage %> of <%= totalPages %></span>
+        <% if (currentPage < totalPages) { %>
+          <a href="/contests?page=<%= currentPage + 1 %>" class="pagination-link">Next</a>
+        <% } %>
+      </div>
+    </div>
+
+    <!-- Right Column: Custom Contest Panel -->
+    <div class="custom-contest-panel">
+      <h2>Create Custom Contest</h2>
+      <p>Generate your own contest with custom parameters!</p>
+      <a href="/contests/custom" class="btn-green">Create Custom Contest</a>
+    </div>
+  </div>
+  <%- include('partials/footer') %>
+</body>
+</html>
