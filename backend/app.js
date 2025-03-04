@@ -8,6 +8,8 @@ const session = require('express-session');
 const passport = require('./config/passport'); // our configured passport
 const problemsRoutes = require('./routes/problems');
 const cookieParser = require('cookie-parser');
+const dashboardRouter = require('./routes/dashboard');
+const jwt = require('jsonwebtoken');
 
 
 const app = express();
@@ -49,6 +51,7 @@ app.use((req, res, next) => {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
         res.locals.user = decoded; // available in all views
       } catch (err) {
+        console.error('JWT verification error:', err);
         res.locals.user = null;
       }
     } else {
@@ -67,6 +70,7 @@ app.use(passport.session());
 app.use('/', indexRoutes);
 app.use('/', authRoutes);
 app.use('/', problemsRoutes);
+app.use('/', dashboardRouter);
 
 
 

@@ -1,0 +1,60 @@
+<!-- frontend/views/dashboard.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Devbits - Dashboard</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <!-- Include header and pass the logged-in user -->
+  <%- include('partials/header', { user: user }) %>
+
+  <div class="dashboard-container">
+    <h1>Welcome, <%= user.username %>!</h1>
+    
+    <section class="user-info">
+      <h2>Your Codeforces Profile</h2>
+      <p>Handle: <%= userInfo.handle %></p>
+      <p>Current Rating: <%= userInfo.rating %></p>
+      <p>Rank: <%= userInfo.rank %></p>
+      <p>Max Rating: <%= userInfo.maxRating %></p>
+      <p>Max Rank: <%= userInfo.maxRank %></p>
+    </section>
+    
+    <section class="contest-history">
+      <h2>Contest History</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Contest Name</th>
+            <th>Rank</th>
+            <th>Rating Change</th>
+            <th>New Rating</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% contestHistory.forEach(contest => { %>
+            <tr>
+              <td><%= contest.contestName %></td>
+              <td><%= contest.rank %></td>
+              <td><%= contest.newRating - contest.oldRating %></td>
+              <td><%= contest.newRating %></td>
+              <td><%= new Date(contest.ratingUpdateTimeSeconds * 1000).toLocaleDateString() %></td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </section>
+    
+    <!-- You can extend this section with performance analytics such as graphs or summary stats -->
+    <section class="performance-analytics">
+      <h2>Performance Analytics</h2>
+      <p><!-- Insert charts or computed analytics here (e.g., average rating change, contest count, etc.) --></p>
+    </section>
+  </div>
+
+  <%- include('partials/footer') %>
+</body>
+</html>

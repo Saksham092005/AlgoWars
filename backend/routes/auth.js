@@ -72,7 +72,7 @@ router.post('/login', async (req, res) => {
     res.cookie('token', token, { httpOnly: true, secure: process.env.NODE_ENV === 'production' });
 
     // Redirect or render success message
-    res.redirect('/problems');
+    res.redirect('/dashboard');
   } catch (error) {
     console.error(error);
     res.status(500).send('Server error');
@@ -85,8 +85,17 @@ router.post('/login', async (req, res) => {
 // logout
 
 router.get('/logout', (req, res) => {
-  res.clearCookie('token');
-  res.redirect('/');
+  req.logout(function(err) {
+    if (err) {
+      console.error(err);
+    }
+    // Clear the JWT token cookie
+    res.clearCookie('token');
+    // Optionally destroy the session
+    req.session.destroy(() => {
+      res.redirect('/');
+    });
+  });
 });
 
 
@@ -104,9 +113,13 @@ router.get(
   '/auth/google/callback',
   passport.authenticate('google', { failureRedirect: '/register?error=not_registered' }),
   (req, res) => {
-    // Successful authentication, redirect to dashboard or home.
-    // console.log("Login succesfful");
-    res.redirect('/');
+    // Generate JWT token for the authenticated user
+    const payload = { id: req.user._id, email: req.user.email };
+    const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' });
+    // Set token as an HTTP-only cookie
+    res.cookie('token', token, { httpOnly: true, secure: process.env.NODE_ENV === 'production' });
+    // Redirect to dashboard after successful login
+    res.redirect('/dashboard');
   }
 );
 
