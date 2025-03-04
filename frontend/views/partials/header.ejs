@@ -1,17 +1,18 @@
-
 <nav class="navbar">
-  <a href="/">Home</a>
-  <% if (typeof user !== 'undefined' && user) { %>
-    <a href="/problems">Problems</a>
-    <a href="/dashboard">Dashboard</a>
-    <a href="/logout">Logout</a>
-  <% } else { %>
-    <a href="/problems">Problems</a>
-    <a href="/auth/google" class="btn-google">Sign in with Google</a>
-    <a href="/login">Sign In</a>
-    <a href="/register">Sign Up</a>
-  <% } %>
-</nav>
+  <!-- Left-Aligned Logo -->
+  <div class="logo">
+    <a href="/">AlgoWars</a>
+  </div>
 
+  <!-- Right-Aligned Navigation Links -->
+  <div class="nav-links">
+    <a href="/problems">Problems</a>
+    <% if (typeof user !== 'undefined' && user) { %>
+      <a href="/dashboard">Dashboard</a>
+      <a href="/logout">Logout</a>
+    <% } else { %>
+      <a href="/login">Sign In</a>
+      <a href="/register">Sign Up</a>
+    <% } %>
   </div>
 </nav>

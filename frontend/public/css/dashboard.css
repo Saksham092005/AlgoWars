@@ -1,0 +1,118 @@
+/* Dashboard Container */
+.dashboard-container {
+    max-width: 1200px;
+    margin: 50px auto;
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Heading */
+  h1 {
+    text-align: center;
+    color: #1e3a5f;
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+  
+  /* Profile Section */
+  .profile-section {
+    background: linear-gradient(135deg, #dae7f3, #e3e8ef);
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 30px;
+    text-align: center;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.05);
+  }
+  
+  .profile-section h2 {
+    color: #1e3a5f;
+    font-size: 1.8rem;
+    margin-bottom: 10px;
+  }
+  
+  .profile-section p {
+    font-size: 1.1rem;
+    margin: 8px 0;
+    color: #333;
+  }
+  
+  /* Profile Stats Layout (optional) */
+  .profile-stats {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-top: 1rem;
+  }
+  
+  .profile-stat {
+    background-color: #ffffff;
+    border-radius: 8px;
+    min-width: 130px;
+    padding: 15px;
+    box-shadow: 0px 2px 6px rgba(0,0,0,0.08);
+  }
+  
+  .profile-stat h3 {
+    font-size: 1.2rem;
+    color: #1e3a5f;
+    margin-bottom: 5px;
+  }
+  
+  .profile-stat p {
+    font-size: 1rem;
+    color: #333;
+    margin: 0;
+  }
+  
+  /* Contest History Table */
+  .contest-history {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    margin-bottom: 20px;
+  }
+  
+  .contest-history th {
+    background-color: #1e3a5f;
+    color: white;
+    padding: 12px;
+    font-size: 16px;
+  }
+  
+  .contest-history td {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    text-align: center;
+    font-size: 0.95rem;
+    color: #333;
+  }
+  
+  .contest-history tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+  
+  /* Hover effect for table rows */
+  .contest-history tr {
+    transition: background-color 0.2s ease;
+  }
+  
+  .contest-history tr:hover {
+    background-color: #eaf0f6;
+  }
+  
+  /* Footer */
+  .footer {
+    text-align: center;
+    background-color: #1e3a5f;
+    color: white;
+    padding: 15px 0;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    font-size: 0.9rem;
+    box-shadow: 0px -2px 5px rgba(0, 0, 0, 0.1);
+  }
+  

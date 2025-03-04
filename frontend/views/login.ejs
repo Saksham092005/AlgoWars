@@ -5,6 +5,7 @@
   <meta charset="UTF-8">
   <title>Devbits - Sign In</title>
   <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/login.css">
 </head>
 <body>
 
@@ -13,16 +14,16 @@
   <div class="form-container">
     <h2>Sign In</h2>
     <form action="/login" method="POST">
-      <label for="email">Email</label>
+      <label for="email"><b>Email</b></label>
       <input type="email" name="email" id="email" required>
 
-      <label for="password">Password</label>
+      <label for="password"><b>Password</b></label>
       <input type="password" name="password" id="password" required>
 
       <button type="submit" class="btn-green">Sign In</button>
     </form>
     <p>Don't have an account? <a href="/register">Sign Up</a></p>
-    <p><a href="/auth/google" class="btn-google">Sign in with Google</a></p>
+    <p><a href="/auth/google" class="btn-google" style="color: white;">Sign in with Google</a></p>
    
   </div>
 

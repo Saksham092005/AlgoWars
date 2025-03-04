@@ -25,7 +25,7 @@ router.get('/dashboard', auth, async (req, res) => {
     try {
       const ratingResponse = await axios.get(`https://codeforces.com/api/user.rating?handle=${codeforcesHandle}`);
       contestHistory = ratingResponse.data.result;
-
+      contestHistory.sort((a, b) => new Date(a.Date) - new Date(b.Date));
       const infoResponse = await axios.get(`https://codeforces.com/api/user.info?handles=${codeforcesHandle}`);
       userInfo = infoResponse.data.result[0];
     } catch (apiError) {

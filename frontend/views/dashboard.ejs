@@ -5,6 +5,7 @@
   <meta charset="UTF-8">
   <title>Devbits - Dashboard</title>
   <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/dashboard.css">
 </head>
 <body>
   <!-- Include header and pass the logged-in user -->
@@ -13,14 +14,25 @@
   <div class="dashboard-container">
     <h1>Welcome, <%= user.username %>!</h1>
     
-    <section class="user-info">
+    <section class="profile-section">
       <h2>Your Codeforces Profile</h2>
-      <p>Handle: <%= userInfo.handle %></p>
-      <p>Current Rating: <%= userInfo.rating %></p>
-      <p>Rank: <%= userInfo.rank %></p>
-      <p>Max Rating: <%= userInfo.maxRating %></p>
-      <p>Max Rank: <%= userInfo.maxRank %></p>
+      <div class="profile-stats">
+        <div class="profile-stat">
+          <h3>Handle</h3>
+          <p><%= userInfo.handle %></p>
+        </div>
+        <div class="profile-stat">
+          <h3>Rating</h3>
+          <p><%= userInfo.rating %></p>
+        </div>
+        <div class="profile-stat">
+          <h3>Rank</h3>
+          <p><%= userInfo.rank %></p>
+        </div>
+        <!-- Add more cards if needed -->
+      </div>
     </section>
+    
     
     <section class="contest-history">
       <h2>Contest History</h2>
