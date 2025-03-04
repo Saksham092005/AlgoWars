@@ -1,0 +1,32 @@
+<!-- frontend/views/customContestDetails.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Devbits - Custom Contest Details</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/customContestDetails.css">
+</head>
+<body>
+  <%- include('partials/header') %>
+  <div class="container">
+    <h1><%= contest.contestName %></h1>
+    <p>Duration: <%= contest.duration %> minutes</p>
+    <h2>Problems</h2>
+    <ul class="problems-list">
+      <% contest.problems.forEach(problem => { %>
+        <li>
+          <a href="https://codeforces.com/problemset/problem/<%= problem.contestId %>/<%= problem.index %>" target="_blank">
+            <%= problem.name %>
+          </a>
+          <% if(problem.rating) { %>
+            <span> - Rating: <%= problem.rating %></span>
+          <% } %>
+        </li>
+      <% }) %>
+    </ul>
+    <a href="/contest/live/<%= contest._id %>" class="btn-green">Join Contest</a>
+  </div>
+  <%- include('partials/footer') %>
+</body>
+</html>
