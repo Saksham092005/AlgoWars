@@ -1,0 +1,148 @@
+/* Container for the entire page content */
+.container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 1rem;
+    background: linear-gradient(135deg, #ffffff, #f9f9f9);
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Flex container for contests page */
+  .contests-page {
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+  }
+  
+  /* Left column: Contest Listings */
+  .contests-list {
+    flex: 2;
+    min-width: 300px;
+  }
+  
+  .contests-list h1 {
+    text-align: left;
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    color: #1C2B2D;
+  }
+  
+  .contests-list section {
+    margin-bottom: 2rem;
+  }
+  
+  .contests-list h2 {
+    color: #1C2B2D;
+    border-bottom: 2px solid #2BAF67;
+    padding-bottom: 0.3rem;
+    margin-bottom: 0.8rem;
+  }
+  
+  .contest-list {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .contest-list li {
+    padding: 0.8rem;
+    margin-bottom: 0.5rem;
+    background: linear-gradient(135deg, #fff, #fefefe);
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .contest-list li:hover {
+    transform: scale(1.02);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .contest-list a {
+    font-size: 1.1rem;
+    font-weight: bold;
+    text-decoration: none;
+    color: #1C2B2D;
+    transition: color 0.3s ease;
+  }
+  
+  .contest-list a:hover {
+    color: #2BAF67;
+    text-decoration: underline;
+  }
+  
+  .contest-list span {
+    font-size: 0.9rem;
+    color: #555;
+  }
+  
+  /* Right column: Custom Contest Panel */
+  .custom-contest-panel {
+    flex: 1;
+    min-width: 250px;
+    padding: 1.5rem;
+    background: linear-gradient(135deg, #f6f9fc, #e9f0f5);
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+    text-align: center;
+  }
+  
+  .custom-contest-panel h2 {
+    color: #1C2B2D;
+    margin-bottom: 1rem;
+  }
+  
+  .custom-contest-panel p {
+    color: #555;
+    margin-bottom: 1.5rem;
+    font-size: 1rem;
+  }
+  
+  /* Button Styling for .btn-green */
+  .btn-green {
+    background: linear-gradient(45deg, #2BAF67, #3ac16c);
+    color: #fff;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+    cursor: pointer;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background 0.3s ease;
+  }
+  
+  .btn-green:hover {
+    background: linear-gradient(45deg, #279d5f, #32b461);
+  }
+  
+
+  /* Pagination Container */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 1.5rem;
+    font-family: "Open Sans", sans-serif;
+  }
+  
+  /* Pagination Links */
+  .pagination-link {
+    padding: 0.5rem 1rem;
+    background: linear-gradient(45deg, #2BAF67, #3ac16c);
+    color: #fff;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background 0.3s ease;
+  }
+  
+  .pagination-link:hover {
+    background: linear-gradient(45deg, #279d5f, #32b461);
+  }
+  
+  /* Pagination Info */
+  .pagination-info {
+    font-size: 1rem;
+    color: #333;
+  }
+  

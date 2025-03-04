@@ -1,0 +1,32 @@
+/* customContest.css */
+
+.container {
+    max-width: 600px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: linear-gradient(135deg, #fdfbfb, #f0f0f0);
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  }
+  
+  .container-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .container-form label {
+    font-weight: bold;
+    color: #333;
+  }
+  
+  .container-form input {
+    padding: 0.6rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  
+  
+  
+  

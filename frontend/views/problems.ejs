@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <title>Devbits - Problem Set</title>
   <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/problems.css">
 </head>
 <body>
 
@@ -44,6 +45,17 @@
         </li>
       <% }) %>
     </ul>
+
+    <!-- Pagination Section -->
+    <div class="pagination">
+      <% if (currentPage > 1) { %>
+        <a href="/problems?page=<%= currentPage - 1 %>&rating=<%= ratingFilter %>&tag=<%= tagFilter %>" class="pagination-link">Previous</a>
+      <% } %>
+      <span class="pagination-info">Page <%= currentPage %> of <%= totalPages %></span>
+      <% if (currentPage < totalPages) { %>
+        <a href="/problems?page=<%= currentPage + 1 %>&rating=<%= ratingFilter %>&tag=<%= tagFilter %>" class="pagination-link">Next</a>
+      <% } %>
+    </div>
   </div>
 
   <!-- Include Footer -->

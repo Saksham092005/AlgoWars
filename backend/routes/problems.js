@@ -6,6 +6,10 @@ router.get('/problems', async (req, res) => {
   try {
     // Retrieve optional filters from query parameters
     const { rating, tag } = req.query;
+    
+    // Determine current page, default to 1 if not provided
+    const page = Number(req.query.page) || 1;
+    const pageSize = 50; // 50 problems per page
 
     // Fetch problems from Codeforces API
     const response = await axios.get('https://codeforces.com/api/problemset.problems');
@@ -26,14 +30,18 @@ router.get('/problems', async (req, res) => {
     // For “latest” problems, sort by contestId descending (using contestId as a proxy for recency)
     problems.sort((a, b) => (b.contestId || 0) - (a.contestId || 0));
 
-    // Optionally, limit the number of displayed problems (e.g., 50)
-    problems = problems.slice(0, 150);
+    // Calculate pagination values
+    const totalProblems = problems.length;
+    const totalPages = Math.ceil(totalProblems / pageSize);
+    const paginatedProblems = problems.slice((page - 1) * pageSize, page * pageSize);
 
-    // Render the problems template, passing along filters for display
+    // Render the problems template, passing along filters and pagination info
     res.render('problems', { 
-      problems,
+      problems: paginatedProblems,
       ratingFilter: rating || "",
-      tagFilter: tag || ""
+      tagFilter: tag || "",
+      currentPage: page,
+      totalPages
     });
   } catch (err) {
     console.error(err);
