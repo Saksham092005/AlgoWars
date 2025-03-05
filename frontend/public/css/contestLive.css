@@ -1,0 +1,102 @@
+/* Live Contest Container */
+.live-contest {
+    max-width: 800px;
+    margin: 3rem auto;
+    padding: 2rem;
+    background: linear-gradient(135deg, #ffffff, #f7f7f7);
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Title (Contest Name) */
+  .live-contest h1 {
+    font-size: 2rem;
+    color: #1e3a5f;
+    margin-bottom: 0.75rem;
+    text-transform: capitalize;
+  }
+  
+  /* Duration Text */
+  .live-contest p {
+    font-size: 1rem;
+    color: #444;
+    margin-bottom: 1rem;
+  }
+  
+  /* Timer */
+  #timer {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #2baf67;
+    margin-bottom: 2rem;
+  }
+  
+  /* Problems Heading */
+  .live-contest h2 {
+    font-size: 1.5rem;
+    color: #1e3a5f;
+    border-bottom: 2px solid #2baf67;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+  }
+  
+ /* Problem List */
+.problem-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  /* Card-like styling for individual problems */
+  .problem-list li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #fff;              /* White card background */
+    padding: 1rem;
+    margin-bottom: 0.75rem;
+    border-radius: 10px;                /* Rounded corners */
+    border: 1px solid #e0e0e0;          /* Light border */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05); /* Subtle shadow */
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+  
+  .problem-list li:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
+  }
+  
+  /* Problem Link */
+  .problem-list a {
+    font-size: 1rem;
+    color: #333;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s;
+  }
+  
+  .problem-list a:hover {
+    color: #2baf67; /* Green accent on hover */
+    text-decoration: underline;
+  }
+  
+  /* Status Label */
+  .status {
+    margin-left: 1rem;
+  font-weight: 600;
+  font-size: 0.95rem;
+  padding: 0.3rem 0.6rem;
+  border-radius: 5px;
+  text-transform: capitalize;
+}
+
+.status.solved {
+  background-color: #2baf67; /* green */
+  color: #fff;
+}
+
+.status.unsolved {
+  background-color: #db4437; /* red */
+  color: #fff;
+}
+  

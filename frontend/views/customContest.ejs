@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Devbits - Create Custom Contest</title>
+  <title>Create Custom Contest</title>
   <link rel="stylesheet" href="/css/style.css">
   <link rel="stylesheet" href="/css/customContest.css">
 </head>
@@ -16,30 +16,18 @@
         <label for="contestName">Contest Name (Optional):</label>
         <input type="text" name="contestName" id="contestName" placeholder="Enter contest name...">
       </div>
-
-      <div class="form-group">
-        <label for="contestType">Contest Type:</label>
-        <select name="contestType" id="contestType" required>
-          <option value="personal">Personal (Practice)</option>
-          <option value="group">Group (Competitive)</option>
-        </select>
-      </div>
-
       <div class="form-group">
         <label for="duration">Duration (minutes):</label>
         <input type="number" name="duration" id="duration" required placeholder="e.g. 60">
       </div>
-
       <div class="form-group">
         <label for="numProblems">Number of Problems:</label>
         <input type="number" name="numProblems" id="numProblems" required placeholder="e.g. 5">
       </div>
-
       <div class="form-group">
-        <label for="ratings">Problem Ratings (comma-separated, e.g., 1000,1200,1300):</label>
+        <label for="ratings">Problem Ratings (comma-separated, e.g., 1200,1300,1500):</label>
         <input type="text" name="ratings" id="ratings" required placeholder="Enter ratings separated by commas">
       </div>
-
       <button type="submit" class="btn-green">Generate Contest</button>
     </form>
   </div>
