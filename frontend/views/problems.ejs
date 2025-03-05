@@ -60,27 +60,32 @@
       </form>
 
       <ul class="problems-list">
-        <% problems.forEach(problem=> { %>
-          <li>
-            <!-- Construct the URL for a Codeforces problem -->
-            <a href="https://codeforces.com/problemset/problem/<%= problem.contestId %>/<%= problem.index %>"
-              target="_blank">
+        <% problems.forEach(problem => { 
+          const problemKey = problem.contestId + "-" + problem.index;
+          const status = problemStatusMap ? problemStatusMap[problemKey] : undefined;
+          let cardClass = "";
+          if (status === "solved") {
+            cardClass = "solved-card";
+          } else if (status === "wrong-only") {
+            cardClass = "wrong-card";
+          }
+        %>
+          <li class="<%= cardClass %>">
+            <a href="https://codeforces.com/problemset/problem/<%= problem.contestId %>/<%= problem.index %>" target="_blank">
               <%= problem.name %>
             </a>
             <% if (problem.rating) { %>
               <span> - Rating: <%= problem.rating %></span>
-              <% } %>
-                <% if (problem.tags) { %>
-                  <div class="tags">Tags:
-                    <% problem.tags.forEach(tag=> { %>
-                      <span class="tag">
-                        <%= tag %>
-                      </span>
-                      <% }) %>
-                  </div>
-                  <% } %>
+            <% } %>
+            <% if (problem.tags) { %>
+              <div class="tags">Tags:
+                <% problem.tags.forEach(t => { %>
+                  <span class="tag"><%= t %></span>
+                <% }) %>
+              </div>
+            <% } %>
           </li>
-          <% }) %>
+        <% }) %>
       </ul>
 
       <!-- Pagination Section -->

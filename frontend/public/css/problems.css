@@ -163,3 +163,14 @@
     background-color: #fff;
   }
   
+/* If user solved at least one submission, highlight in pale green */
+.solved-card {
+  background: #e2f9e2; /* light green */
+  border: 2px solid #8be48b; /* medium green */
+}
+
+/* If user has only wrong submissions, highlight in pale red */
+.wrong-card {
+  background: #ffe2e2; /* light red */
+  border: 2px solid #ffaaaa; /* medium red */
+}
