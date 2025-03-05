@@ -1,0 +1,81 @@
+<!-- views/liveContest.ejs -->
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Live Contest - <%= contest.contestName %></title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/contestLive.css">
+</head>
+<body>
+  <%- include('partials/header') %>
+  <div class="container live-contest">
+    <h1><%= contest.contestName %></h1>
+    <p>Duration: <%= contest.duration %> minutes</p>
+    <div id="timer" style="font-size:1.5rem;font-weight:bold;margin-bottom:20px;"></div>
+    <h2>Problems</h2>
+    <ul class="problem-list">
+      <% contest.problems.forEach(problem => { %>
+        <li>
+          <a href="https://codeforces.com/problemset/problem/<%= problem.contestId %>/<%= problem.index %>" target="_blank">
+            <%= problem.name %> (Rating: <%= problem.rating %>)
+          </a>
+          <span class="status" id="status-<%= problem.contestId %>-<%= problem.index %>">Unsolved</span>
+        </li>
+      <% }) %>
+    </ul>
+  </div>
+  <%- include('partials/footer') %>
+
+  <script>
+    // 1. Convert contest.startTime to a Date object
+    const startTime = new Date("<%= contest.startTime.toISOString() %>");
+    // 2. Convert duration (minutes) to milliseconds
+    const durationMs = <%- JSON.stringify(contest.duration) %> * 60 * 1000;
+    // 3. End time
+    const endTime = new Date(startTime.getTime() + durationMs);
+
+    function updateTimer() {
+      const now = new Date();
+      const remaining = endTime - now;
+      const timerEl = document.getElementById("timer");
+
+      if (remaining <= 0) {
+        timerEl.textContent = "Contest Ended";
+        clearInterval(timerInterval);
+        return;
+      }
+
+      // Show hours, minutes, seconds
+      const hours = Math.floor(remaining / (1000 * 60 * 60));
+      const minutes = Math.floor((remaining % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((remaining % (1000 * 60)) / 1000);
+      timerEl.textContent = `Time Remaining: ${hours}h ${minutes}m ${seconds}s`;
+    }
+
+    updateTimer();
+    const timerInterval = setInterval(updateTimer, 1000);
+
+    // Poll the contest status endpoint every 10s
+    function fetchContestStatus() {
+      fetch("/contest/status/<%= contest._id %>")
+        .then(res => res.json())
+        .then(data => {
+          if (data.problemsStatus) {
+            data.problemsStatus.forEach(ps => {
+              const statusEl = document.getElementById(`status-${ps.contestId}-${ps.index}`);
+              if (statusEl) {
+                statusEl.textContent = ps.solved ? "Solved ✓" : "Unsolved ✗";
+                statusEl.className = ps.solved ? "status solved" : "status unsolved";
+              }
+            });
+          }
+        })
+        .catch(err => console.error("Error fetching status:", err));
+    }
+
+    // Poll every 10 seconds
+    setInterval(fetchContestStatus, 10000);
+  </script>
+</body>
+</html>
