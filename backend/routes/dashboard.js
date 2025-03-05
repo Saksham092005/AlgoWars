@@ -2,7 +2,7 @@ const express = require('express');
 const axios = require('axios');
 const router = express.Router();
 const User = require('../models/User');
-const auth = require('../middleware/auth');  
+const auth = require('../middleware/auth');
 
 router.get('/dashboard', auth, async (req, res) => {
   try {
@@ -42,19 +42,19 @@ router.get('/dashboard', auth, async (req, res) => {
     try {
       const subsResponse = await axios.get(`https://codeforces.com/api/user.status?handle=${codeforcesHandle}`);
       submissions = subsResponse.data.result;
-      
+
       // Compute active days from submissions (YYYY-MM-DD format)
       const allDates = submissions.map(sub => {
         const date = new Date(sub.creationTimeSeconds * 1000);
         return date.toISOString().split('T')[0];
       });
       allDates.forEach(date => activeDays.add(date));
-      
+
       // Generate streak data for the past year
       const today = new Date();
       const oneYearAgo = new Date(today);
       oneYearAgo.setFullYear(today.getFullYear() - 1);
-      
+
       let currentDate = new Date(oneYearAgo);
       while (currentDate <= today) {
         const dateStr = currentDate.toISOString().split('T')[0];
@@ -64,14 +64,14 @@ router.get('/dashboard', auth, async (req, res) => {
         });
         currentDate.setDate(currentDate.getDate() + 1);
       }
-      
+
       // Compute current streak (count consecutive days active from today backwards)
       let checkDate = new Date(today);
       while (activeDays.has(checkDate.toISOString().split('T')[0])) {
         currentStreak++;
         checkDate.setDate(checkDate.getDate() - 1);
       }
-      
+
       // Compute weak topics by counting wrong submissions per tag
       const wrongSubs = submissions.filter(sub => sub.verdict && sub.verdict !== "OK");
       wrongSubs.forEach(sub => {
@@ -95,14 +95,53 @@ router.get('/dashboard', auth, async (req, res) => {
         return obj;
       }, {});
 
+
+
+    let solvedProblemsMap = new Map();
+    submissions.forEach(sub => {
+      if (sub.verdict === "OK" && sub.problem) {
+        const key = `${sub.problem.contestId}_${sub.problem.index}`;
+        if (!solvedProblemsMap.has(key)) {
+          solvedProblemsMap.set(key, sub.problem);
+        }
+      }
+    });
+
+    // Count solved problems per tag
+    let solvedTagCounts = {};
+    solvedProblemsMap.forEach(problem => {
+      if (problem.tags) {
+        problem.tags.forEach(tag => {
+          solvedTagCounts[tag] = (solvedTagCounts[tag] || 0) + 1;
+        });
+      }
+    });
+
+    // Count solved problems per difficulty rating
+    let solvedRatingCounts = {};
+    solvedProblemsMap.forEach(problem => {
+      if (problem.rating) {
+        solvedRatingCounts[problem.rating] = (solvedRatingCounts[problem.rating] || 0) + 1;
+      }
+    });
+
+
+
+
+
+
+
+
     // Render the dashboard view with all analytics data
-    res.render('dashboard', { 
-      contestHistory, 
-      userInfo, 
+    res.render('dashboard', {
+      contestHistory,
+      userInfo,
       user,
       streakData,         // Array of { date, active } objects for the past year
       currentStreak,      // Number of consecutive active days
-      weakTopics: sortedWeakTopics  // Weak topics sorted by wrong submission counts
+      weakTopics: sortedWeakTopics, // Weak topics sorted by wrong submission counts
+      solvedTagCounts,       // Data for pie chart: solved problems by tag
+      solvedRatingCounts     // Data for bar chart: solved problems by difficulty rating
     });
   } catch (err) {
     console.error("Dashboard Error:", err);

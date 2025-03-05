@@ -9,11 +9,12 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-  <!-- 1. Navbar -->
+  <!-- Navbar -->
   <%- include('partials/header', { user: user }) %>
 
   <div class="dashboard-container">
-    <!-- 2. Codeforces Profile Section -->
+    
+    <!-- Profile Section -->
     <section class="profile-section">
       <div class="profile-header">
         <div class="profile-avatar">
@@ -35,54 +36,55 @@
       </div>
     </section>
     
-    <!-- 3. Full-Width Rating Graph Section -->
+    <!-- Full-Width Rating Graph Section -->
     <section class="analytics-card rating-fullwidth">
       <h3>Rating Over Time</h3>
       <canvas id="ratingChart"></canvas>
     </section>
-
-    <!-- 4. Horizontal Activity Tracker (Contribution Graph) -->
+    
+    <!-- Horizontal Activity Tracker (Contribution Graph) Section -->
     <% 
       // Convert streakData (array of { date, active }) into a Set of activeDays.
       const activeDays = new Set();
       streakData.forEach(d => { if (d.active) activeDays.add(d.date); });
     %>
     <section class="analytics-card contribution-fullwidth">
-      <h3>Contribution Streak</h3>
+      <h3>Activity</h3>
       <div class="contribution-graph">
         <% 
-          // Wrap this logic in an IIFE to avoid variable conflicts.
+          // Build the graph data: We go backward 365 days and group into weeks.
           (function(){
             const graphToday = new Date();
-            const graphYearAgo = new Date(graphToday);
-            graphYearAgo.setDate(graphToday.getDate() - 365);
-            
-            const weeks = [];
-            let currentDate = new Date(graphYearAgo);
-            
+            const yearAgo = new Date(graphToday);
+            yearAgo.setDate(graphToday.getDate() - 365);
+            let weeksNewestToOldest = [];
+            let currentDate = new Date(graphToday);
+            // Align to Saturday (so current column ends on Saturday)
+            while (currentDate.getDay() !== 6) { 
+              currentDate.setDate(currentDate.getDate() + 1);
+            }
             for (let w = 0; w < 53; w++) {
               const week = [];
-              for (let d = 0; d < 7; d++) {
-                const thisDate = new Date(currentDate);
-                const isoDate = thisDate.toISOString().split('T')[0];
+              for (let d = 6; d >= 0; d--) {
+                let tempDate = new Date(currentDate);
+                tempDate.setDate(currentDate.getDate() - (6 - d));
+                if (tempDate < yearAgo) break;
+                const isoDate = tempDate.toISOString().split('T')[0];
                 const isActive = activeDays.has(isoDate);
-                week.push({
+                week.unshift({
                   date: isoDate,
                   active: isActive,
-                  month: thisDate.getMonth()
+                  month: tempDate.getMonth()
                 });
-                currentDate.setDate(currentDate.getDate() + 1);
-                if (currentDate > graphToday) break;
               }
-              weeks.push(week);
-              if (currentDate > graphToday) break;
+              weeksNewestToOldest.push(week);
+              currentDate.setDate(currentDate.getDate() - 7);
+              if (currentDate < yearAgo) break;
             }
-            
-            // Expose the computed weeks to the template via locals
-            locals.weeksForGraph = weeks;
+            const weeksForGraph = weeksNewestToOldest.reverse();
+            locals.weeksForGraph = weeksForGraph;
           })();
         %>
-
         <!-- Month Labels Row -->
         <div class="months-row">
           <div class="spacer">&nbsp;</div>
@@ -109,16 +111,8 @@
             <% }); %>
           </div>
         </div>
-
-        <!-- The Grid of Weeks -->
+        <!-- Weeks Grid -->
         <div class="weeks-grid">
-          <!-- Day-of-week labels -->
-          <div class="days-labels">
-            <% ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].forEach(dow => { %>
-              <div class="day-label"><%= dow %></div>
-            <% }); %>
-          </div>
-          <!-- Week columns -->
           <div class="weeks-row">
             <% weeksForGraph.forEach(week => { %>
               <div class="week-column">
@@ -129,32 +123,19 @@
             <% }); %>
           </div>
         </div>
-
-        <!-- Streak Info Footer -->
+        <!-- Streak Footer -->
         <div class="streak-footer">
           <p>Current Streak: <span class="streak-number"><%= currentStreak %></span> days</p>
-          <div class="legend">
-            <span>Less</span>
-            <div class="legend-box level-1"></div>
-            <div class="legend-box level-2"></div>
-            <div class="legend-box level-3"></div>
-            <div class="legend-box level-4"></div>
-            <div class="legend-box level-5"></div>
-            <span>More</span>
-          </div>
         </div>
       </div>
     </section>
-
-    <!-- 5. Last Section: Two Columns (Weak Topics & Recent Contests) -->
+    
+    <!-- Last Section: Two Columns (Weak Topics & Recent Contests) -->
     <section class="last-section-grid">
-      <!-- Left: Weak Topics Bar Graph -->
       <div class="analytics-card weak-topics">
         <h3>Weak Topics</h3>
         <canvas id="weakTopicsChart"></canvas>
       </div>
-
-      <!-- Right: Recent Contests -->
       <div class="analytics-card contest-history">
         <h3>Recent Contests</h3>
         <table>
@@ -179,6 +160,19 @@
         </table>
       </div>
     </section>
+    
+    <!-- New Section: Solved Problems by Tag (Pie Chart) -->
+    <section class="analytics-card solved-tags">
+      <h3>Problems Solved by Tag</h3>
+      <canvas id="solvedTagsChart"></canvas>
+    </section>
+    
+    <!-- New Section: Solved Problems by Difficulty (Bar Chart) -->
+    <section class="analytics-card solved-ratings">
+      <h3>Problems Solved by Difficulty</h3>
+      <canvas id="solvedRatingsChart"></canvas>
+    </section>
+    
   </div>
 
   <%- include('partials/footer') %>
@@ -248,6 +242,58 @@
             beginAtZero: true,
             title: { display: true, text: 'Wrong Submissions' }
           }
+        }
+      }
+    });
+
+    // 3) Solved Tags Pie Chart
+    const solvedTags = <%- JSON.stringify(solvedTagCounts) %>;
+    const tagLabels = Object.keys(solvedTags);
+    const tagValues = Object.values(solvedTags);
+
+    const solvedTagsCtx = document.getElementById('solvedTagsChart').getContext('2d');
+    new Chart(solvedTagsCtx, {
+      type: 'pie',
+      data: {
+        labels: tagLabels,
+        datasets: [{
+          data: tagValues,
+          backgroundColor: tagLabels.map(() => `hsl(${Math.floor(Math.random()*360)},70%,60%)`),
+          // radius of pie chart
+         // radius: '50%'
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { position: 'bottom' }
+        }
+      }
+    });
+
+    // 4) Solved Ratings Bar Chart
+    const solvedRatings = <%- JSON.stringify(solvedRatingCounts) %>;
+    const ratingLabels = Object.keys(solvedRatings);
+    const ratingValues = Object.values(solvedRatings);
+
+    const solvedRatingsCtx = document.getElementById('solvedRatingsChart').getContext('2d');
+    new Chart(solvedRatingsCtx, {
+      type: 'bar',
+      data: {
+        labels: ratingLabels,
+        datasets: [{
+          label: 'Problems Solved',
+          data: ratingValues,
+          backgroundColor: 'rgba(43, 175, 103, 0.6)',
+          borderColor: 'rgba(43, 175, 103, 1)',
+          borderWidth: 1
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          x: { title: { display: true, text: 'Difficulty Rating' } },
+          y: { beginAtZero: true, title: { display: true, text: 'Problems Solved' } }
         }
       }
     });
