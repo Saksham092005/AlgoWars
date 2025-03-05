@@ -8,7 +8,13 @@
   <link rel="stylesheet" href="/css/login.css">
 </head>
 <body>
-
+  <% if (error) { %>
+    <script>
+      alert("<%= error %>");
+      // Redirect back to login (or you could simply let the user try again)
+      window.location.href = "/login";
+    </script>
+  <% } %>
   <%- include('partials/header') %>
 
   <div class="form-container">

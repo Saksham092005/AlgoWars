@@ -107,6 +107,7 @@ body {
   padding: 1rem;
   margin-bottom: 0.8rem;
   background: white;
+  border: 1px solid rgb(75, 74, 74);
   border-radius: 10px;
   box-shadow: 
     0 4px 10px rgba(0, 0, 0, 0.05);
@@ -157,17 +158,12 @@ body {
   flex: 1;
   min-width: 300px;
   padding: 2rem;
-  background: linear-gradient(
-    135deg, 
-    #2BAF67 0%, 
-    #3ac16c 100%
-  );
+  border: 2px solid black;
   border-radius: 12px;
-  color: white;
+  color: black;
   text-align: center;
-  box-shadow: 
-    0 10px 25px rgba(43, 175, 103, 0.2);
   transition: transform 0.2s ease;
+  margin-bottom: 2rem;
 }
 
 .custom-contest-panel:hover {
@@ -175,14 +171,14 @@ body {
 }
 
 .custom-contest-panel h2 {
-  color: white;
+  color: black;
   margin-bottom: 1rem;
   font-size: 1.8rem;
   font-weight: 600;
 }
 
 .custom-contest-panel p {
-  color: rgba(255, 255, 255, 0.9);
+  color: black;
   margin-bottom: 1.5rem;
   font-size: 1rem;
   line-height: 1.5;
@@ -191,8 +187,8 @@ body {
 .btn-green {
   display: inline-block;
   background: white;
-  color: #2BAF67;
-  border: none;
+  color: black;
+  border: 1px solid black;
   padding: 0.9rem 2rem;
   font-size: 1rem;
   font-weight: 600;

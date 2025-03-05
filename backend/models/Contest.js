@@ -13,7 +13,8 @@ const contestSchema = new mongoose.Schema({
     }
   ],
   startTime: { type: Date }, // will be set when contest starts
-  participants: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }]
+  creator: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+  participants: { type: [mongoose.Schema.Types.ObjectId], default: [] }
 }, { timestamps: true });
 
 module.exports = mongoose.model('Contest', contestSchema);

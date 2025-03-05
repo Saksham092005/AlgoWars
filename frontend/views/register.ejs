@@ -13,7 +13,12 @@
           alert("You are not registered! Please sign up first.");
       </script>
   <% } %>
-
+  <% if (error) { %>
+    <script>
+      alert("<%= error %>");
+      window.location.href = "/register";
+    </script>
+  <% } %>
   <%- include('partials/header') %>
 
   <div class="form-container">

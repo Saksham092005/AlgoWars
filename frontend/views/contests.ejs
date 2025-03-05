@@ -1,4 +1,3 @@
-<!-- frontend/views/contests.ejs -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,7 +9,8 @@
 <body>
   <%- include('partials/header') %>
   <div class="container contests-page">
-    <!-- Left Column: Contest Listings -->
+
+    <!-- Left Column: Codeforces Contest Listings -->
     <div class="contests-list">
       <h1>Codeforces Contests</h1>
       
@@ -54,12 +54,36 @@
       </div>
     </div>
 
-    <!-- Right Column: Custom Contest Panel -->
-    <div class="custom-contest-panel">
-      <h2>Create Custom Contest</h2>
-      <p>Generate your own contest with custom parameters!</p>
-      <a href="/contests/custom" class="btn-green">Create Custom Contest</a>
-    </div>
+    <!-- Right Column: Custom Contest Panel + My Running Contests -->
+    <div class="right-column">
+      
+      <!-- Custom Contest Creation Panel -->
+      <div class="custom-contest-panel">
+        <h2>Create Custom Contest</h2>
+        <p>Generate your own contest with custom parameters!</p>
+        <a href="/contests/custom" class="btn-green">Create Custom Contest</a>
+      </div>
+
+      <!-- My Running Contests Section (moved here) -->
+      <% if (runningContests && runningContests.length > 0) { %>
+        <div class="running-contests-panel">
+          <h2>My Running Custom Contests</h2>
+          <ul class="contest-list">
+            <% runningContests.forEach(contest => { %>
+              <li>
+                <a href="/contest/live/<%= contest._id %>"><%= contest.contestName %></a>
+                <% 
+                  const endTime = new Date(contest.startTime.getTime() + contest.duration * 60 * 1000);
+                %>
+                <span> | Ends at: <%= endTime.toLocaleString() %></span>
+              </li>
+            <% }) %>
+          </ul>
+        </div>
+      <% } %>
+
+    </div><!-- end .right-column -->
+
   </div>
   <%- include('partials/footer') %>
 </body>

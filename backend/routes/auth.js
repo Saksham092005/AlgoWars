@@ -19,9 +19,19 @@ router.post('/register', async (req, res) => {
     // Check if user already exists
     const existingUser = await User.findOne({ $or: [{ email }, { username }] });
     if (existingUser) {
-      return res.send('User with that email/username already exists');
+      return res.redirect('/register?error=' + encodeURIComponent('User with that email/username already exists'));
     }
-
+    // Validate Codeforces handle by calling the Codeforces API
+    try {
+      const cfResponse = await axios.get(`https://codeforces.com/api/user.info?handles=${codeforcesHandle}`);
+      // The API should return status "OK" if the handle exists
+      if (cfResponse.data.status !== "OK") {
+        return res.redirect('/register?error=' + encodeURIComponent('Codeforces handle not found'));
+      }
+    } catch (cfError) {
+      // If there's an error in the API call, treat it as an invalid handle
+      return res.redirect('/register?error=' + encodeURIComponent('Codeforces handle not found'));
+    }
     // Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -44,7 +54,7 @@ router.post('/register', async (req, res) => {
 
 // GET Login page
 router.get('/login', (req, res) => {
-  res.render('login');
+  res.render('login', { error: req.query.error });
 });
 
 // POST Login form
@@ -55,13 +65,13 @@ router.post('/login', async (req, res) => {
     // Find user by email
     const user = await User.findOne({ email });
     if (!user) {
-      return res.send('Incorrect Password or Username');
+      return res.redirect('/login?error=' + encodeURIComponent('Incorrect Password or Username'));
     }
 
     // Compare password
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      return res.send('Incorrect Password or Username');
+      return res.redirect('/login?error=' + encodeURIComponent('Incorrect Password or Username'));
     }
 
     // Generate JWT token
