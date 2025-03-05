@@ -151,7 +151,16 @@
     font-size: 1rem;
     color: #333;
   }
-  
+  .filter-form{
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    background: linear-gradient(135deg, #f6f9fc, #dddedf);
+    border-radius: 8px;
+  }
   .filter-form input[type="number"] {
     width: 80px;
   }
@@ -166,11 +175,11 @@
 /* If user solved at least one submission, highlight in pale green */
 .solved-card {
   background: #e2f9e2; /* light green */
-  border: 2px solid #8be48b; /* medium green */
+  border: 6px solid #8be48b; /* medium green */
 }
 
 /* If user has only wrong submissions, highlight in pale red */
 .wrong-card {
   background: #ffe2e2; /* light red */
-  border: 2px solid #ffaaaa; /* medium red */
+  border: 6px solid #ffaaaa; /* medium red */
 }
