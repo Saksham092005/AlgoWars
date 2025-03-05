@@ -7,11 +7,15 @@
     box-sizing: border-box;
   }
   
-  body {
+  html, body{
     font-family: "Open Sans", sans-serif;
     color: #1C2B2D; /* Dark color for text */
-    
-    background: linear-gradient(to right, #f8f9fa, #afc6dd);
+    background:  linear-gradient(#f9f8f8, #1e3a5f0a, #1e3a5f47) !important;
+    display: flex;
+    flex-direction: column;
+  }
+  .main-content {
+    flex: 1; /* Pushes the footer down */
   }
   
   /* Navbar */
@@ -53,7 +57,8 @@
     align-items: center;
     text-align: center;
     padding: 2rem;
-    background: linear-gradient(to right, #f8f9fa, #afc6dd);
+    background: linear-gradient(to right, #f8f9fa, #757576);
+
   }
   
   .hero h1 {
@@ -99,7 +104,7 @@
     color: #FFFFFF;
     text-align: center;
     padding: 1rem;
-    margin-top: 2rem;
+    margin-top: 3rem;
   }
   .btn-google {
     background-color: #db4437; /* Google red */
