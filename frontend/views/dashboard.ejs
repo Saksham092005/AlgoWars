@@ -6,9 +6,10 @@
   <title>Devbits - Dashboard</title>
   <link rel="stylesheet" href="/css/style.css">
   <link rel="stylesheet" href="/css/dashboard.css">
+  <!-- Include Chart.js for the rating graph -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-  <!-- Include header and pass the logged-in user -->
   <%- include('partials/header', { user: user }) %>
 
   <div class="dashboard-container">
@@ -29,10 +30,8 @@
           <h3>Rank</h3>
           <p><%= userInfo.rank %></p>
         </div>
-        <!-- Add more cards if needed -->
       </div>
     </section>
-    
     
     <section class="contest-history">
       <h2>Contest History</h2>
@@ -60,13 +59,78 @@
       </table>
     </section>
     
-    <!-- You can extend this section with performance analytics such as graphs or summary stats -->
+    <!-- Performance Analytics Section -->
     <section class="performance-analytics">
       <h2>Performance Analytics</h2>
-      <p><!-- Insert charts or computed analytics here (e.g., average rating change, contest count, etc.) --></p>
+      
+      <!-- 1. Rating Graph -->
+      <div class="rating-graph">
+        <h3>Rating Over Time</h3>
+        <canvas id="ratingChart"></canvas>
+      </div>
+      
+      <!-- 2. Streak Tracker -->
+      <div class="streak-tracker">
+        <h3>Streak Tracker</h3>
+        <p>Current Active Streak: <strong><%= currentStreak %> days</strong></p>
+        <p>Active Days:</p>
+        <ul class="active-days">
+          <% activeDays.forEach(day => { %>
+            <li><%= day %></li>
+          <% }) %>
+        </ul>
+      </div>
+      
+      <!-- 3. Weak Topics -->
+      <div class="weak-topics">
+        <h3>Weak Topics</h3>
+        <ul>
+          <% Object.keys(weakTopics).forEach(tag => { %>
+            <li><%= tag %> - <%= weakTopics[tag] %> wrong submissions</li>
+          <% }) %>
+        </ul>
+      </div>
     </section>
   </div>
 
   <%- include('partials/footer') %>
+
+  <!-- Chart.js script to render the rating graph -->
+  <script>
+    // Prepare data for the rating graph from contestHistory
+    const contests = <%- JSON.stringify(contestHistory) %>;
+    const labels = contests.map(contest => {
+      const d = new Date(contest.ratingUpdateTimeSeconds * 1000);
+      return d.toLocaleDateString();
+    });
+    const ratings = contests.map(contest => contest.newRating);
+
+    const ctx = document.getElementById('ratingChart').getContext('2d');
+    const ratingChart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: labels,
+        datasets: [{
+          label: 'CF Rating',
+          data: ratings,
+          borderColor: '#2BAF67',
+          backgroundColor: 'rgba(43, 175, 103, 0.2)',
+          fill: true,
+          tension: 0.2
+        }]
+      },
+      options: {
+        scales: {
+          x: {
+            title: { display: true, text: 'Date' }
+          },
+          y: {
+            title: { display: true, text: 'Rating' },
+            beginAtZero: false
+          }
+        }
+      }
+    });
+  </script>
 </body>
 </html>
