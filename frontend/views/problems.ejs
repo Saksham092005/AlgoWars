@@ -1,65 +1,103 @@
+<!-- frontend/views/problems.ejs -->
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>Devbits - Problem Set</title>
   <link rel="stylesheet" href="/css/style.css">
   <link rel="stylesheet" href="/css/problems.css">
 </head>
-<body>
 
-  <!-- Include Navbar -->
+<body>
   <%- include('partials/header') %>
 
-  <div class="container">
-    <h1>Problem Set</h1>
-    
-    <!-- Filter form -->
-    <form action="/problems" method="GET" class="filter-form">
-      <label for="rating">Rating:</label>
-      <input type="text" name="rating" id="rating" value="<%= ratingFilter %>">
-      
-      <label for="tag">Tag:</label>
-      <input type="text" name="tag" id="tag" value="<%= tagFilter %>">
-      
-      <button type="submit" class="btn-green">Filter</button>
-    </form>
+    <div class="container">
+      <h1>Problem Set</h1>
 
-    <ul class="problems-list">
-      <% problems.forEach(problem => { %>
-        <li>
-          <!-- Construct the URL for a Codeforces problem -->
-          <a href="https://codeforces.com/problemset/problem/<%= problem.contestId %>/<%= problem.index %>" target="_blank">
-            <%= problem.name %>
-          </a>
-          <% if (problem.rating) { %>
-            <span> - Rating: <%= problem.rating %></span>
-          <% } %>
-          <% if (problem.tags) { %>
-            <div class="tags">Tags:
-              <% problem.tags.forEach(tag => { %>
-                <span class="tag"><%= tag %></span>
-              <% }) %>
-            </div>
-          <% } %>
-        </li>
-      <% }) %>
-    </ul>
+      <!-- Filter form -->
+      <form action="/problems" method="GET" class="filter-form">
+        <label for="minRating">Rating Range:</label>
+        <input type="number" name="minRating" id="minRating" placeholder="Min" value="<%= minRating %>">
+        <input type="number" name="maxRating" id="maxRating" placeholder="Max" value="<%= maxRating %>">
+        <label for="tag">Tag:</label>
+        <select name="tag" id="tag">
+          <option value="" <% if (!tagFilter) { %> selected <% } %> >All</option>
+          <option value="binary search" <% if (tagFilter==="binary search" ) { %> selected <% } %> >Binary Search
+          </option>
+          <option value="bitmasks" <% if (tagFilter==="bitmasks" ) { %> selected <% } %> >Bitmasks</option>
+          <option value="brute force" <% if (tagFilter==="brute force" ) { %> selected <% } %> >Brute Force</option>
+          <option value="combinatorics" <% if (tagFilter==="combinatorics" ) { %> selected <% } %> >Combinatorics
+          </option>
+          <option value="constructive algorithms" <% if (tagFilter==="constructive algorithms" ) { %> selected <% } %>
+              >Constructive Algorithms</option>
+          <option value="data structures" <% if (tagFilter==="data structures" ) { %> selected <% } %> >Data Structures
+          </option>
+          <option value="dfs and similar" <% if (tagFilter==="dfs and similar" ) { %> selected <% } %> >DFS and Similar
+          </option>
+          <option value="divide and conquer" <% if (tagFilter==="divide and conquer" ) { %> selected <% } %> >Divide and
+              Conquer</option>
+          <option value="dp" <% if (tagFilter==="dp" ) { %> selected <% } %> >DP</option>
+          <option value="dsu" <% if (tagFilter==="dsu" ) { %> selected <% } %> >DSU</option>
+          <option value="games" <% if (tagFilter==="games" ) { %> selected <% } %> >Games</option>
+          <option value="geometry" <% if (tagFilter==="geometry" ) { %> selected <% } %> >Geometry</option>
+          <option value="graphs" <% if (tagFilter==="graphs" ) { %> selected <% } %> >Graphs</option>
+          <option value="greedy" <% if (tagFilter==="greedy" ) { %> selected <% } %> >Greedy</option>
+          <option value="hashing" <% if (tagFilter==="hashing" ) { %> selected <% } %> >Hashing</option>
+          <option value="implementation" <% if (tagFilter==="implementation" ) { %> selected <% } %> >Implementation
+          </option>
+          <option value="interactive" <% if (tagFilter==="interactive" ) { %> selected <% } %> >Interactive</option>
+          <option value="math" <% if (tagFilter==="math" ) { %> selected <% } %> >Math</option>
+          <option value="number theory" <% if (tagFilter==="number theory" ) { %> selected <% } %> >Number Theory
+          </option>
+          <option value="strings" <% if (tagFilter==="strings" ) { %> selected <% } %> >Strings</option>
+          <option value="trees" <% if (tagFilter==="trees" ) { %> selected <% } %> >Trees</option>
+          <option value="two pointers" <% if (tagFilter==="two pointers" ) { %> selected <% } %> >Two Pointers</option>
+        </select>
 
-    <!-- Pagination Section -->
-    <div class="pagination">
-      <% if (currentPage > 1) { %>
-        <a href="/problems?page=<%= currentPage - 1 %>&rating=<%= ratingFilter %>&tag=<%= tagFilter %>" class="pagination-link">Previous</a>
-      <% } %>
-      <span class="pagination-info">Page <%= currentPage %> of <%= totalPages %></span>
-      <% if (currentPage < totalPages) { %>
-        <a href="/problems?page=<%= currentPage + 1 %>&rating=<%= ratingFilter %>&tag=<%= tagFilter %>" class="pagination-link">Next</a>
-      <% } %>
+
+        <button type="submit" class="btn-green">Filter</button>
+      </form>
+
+      <ul class="problems-list">
+        <% problems.forEach(problem=> { %>
+          <li>
+            <!-- Construct the URL for a Codeforces problem -->
+            <a href="https://codeforces.com/problemset/problem/<%= problem.contestId %>/<%= problem.index %>"
+              target="_blank">
+              <%= problem.name %>
+            </a>
+            <% if (problem.rating) { %>
+              <span> - Rating: <%= problem.rating %></span>
+              <% } %>
+                <% if (problem.tags) { %>
+                  <div class="tags">Tags:
+                    <% problem.tags.forEach(tag=> { %>
+                      <span class="tag">
+                        <%= tag %>
+                      </span>
+                      <% }) %>
+                  </div>
+                  <% } %>
+          </li>
+          <% }) %>
+      </ul>
+
+      <!-- Pagination Section -->
+      <div class="pagination">
+        <% if (currentPage> 1) { %>
+          <a href="/problems?page=<%= currentPage - 1 %>&minRating=<%= minRating %>&maxRating=<%= maxRating %>&tag=<%= tagFilter %>"
+            class="pagination-link">Previous</a>
+          <% } %>
+            <span class="pagination-info">Page <%= currentPage %> of <%= totalPages %></span>
+            <% if (currentPage < totalPages) { %>
+              <a href="/problems?page=<%= currentPage + 1 %>&minRating=<%= minRating %>&maxRating=<%= maxRating %>&tag=<%= tagFilter %>"
+                class="pagination-link">Next</a>
+              <% } %>
+      </div>
     </div>
-  </div>
 
-  <!-- Include Footer -->
-  <%- include('partials/footer') %>
-
+    <%- include('partials/footer') %>
 </body>
+
 </html>

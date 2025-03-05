@@ -1,3 +1,4 @@
+// routes/problems.js
 const express = require('express');
 const axios = require('axios');
 const router = express.Router();
@@ -5,7 +6,7 @@ const router = express.Router();
 router.get('/problems', async (req, res) => {
   try {
     // Retrieve optional filters from query parameters
-    const { rating, tag } = req.query;
+    const { minRating, maxRating, tag } = req.query;
     
     // Determine current page, default to 1 if not provided
     const page = Number(req.query.page) || 1;
@@ -15,9 +16,12 @@ router.get('/problems', async (req, res) => {
     const response = await axios.get('https://codeforces.com/api/problemset.problems');
     let problems = response.data.result.problems;
 
-    // Filter problems by rating if provided
-    if (rating) {
-      problems = problems.filter(problem => problem.rating == rating);
+    // Filter problems by rating range if provided
+    if (minRating) {
+      problems = problems.filter(problem => problem.rating && problem.rating >= Number(minRating));
+    }
+    if (maxRating) {
+      problems = problems.filter(problem => problem.rating && problem.rating <= Number(maxRating));
     }
 
     // Filter problems by tag if provided
@@ -38,9 +42,10 @@ router.get('/problems', async (req, res) => {
     // Render the problems template, passing along filters and pagination info
     res.render('problems', { 
       problems: paginatedProblems,
-      ratingFilter: rating || "",
+      minRating: minRating || "",
+      maxRating: maxRating || "",
       tagFilter: tag || "",
-      currentPage: page,
+      currentPage: page, 
       totalPages
     });
   } catch (err) {
