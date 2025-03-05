@@ -1,0 +1,34 @@
+<!-- frontend/views/personalContest.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Devbits - Personal Contest</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/personalContest.css">
+</head>
+<body>
+  <%- include('partials/header') %>
+  <div class="container personal-contest">
+    <h1><%= contest.contestName %></h1>
+    <p>Duration: <%= contest.duration %> minutes</p>
+    <h2>Problems</h2>
+    <ul class="problem-status-list">
+      <% problemsStatus.forEach(problem => { %>
+        <li class="problem-item">
+          <a href="https://codeforces.com/problemset/problem/<%= problem.contestId %>/<%= problem.index %>" target="_blank">
+            <%= problem.name %>
+          </a>
+          <% if (problem.solved) { %>
+            <span class="status solved">Solved &#x2714;</span>
+          <% } else { %>
+            <span class="status unsolved">Unsolved &#x2718;</span>
+          <% } %>
+        </li>
+      <% }) %>
+    </ul>
+    <a href="/contest/start/<%= contest._id %>" class="btn-green">Refresh Results</a>
+  </div>
+  <%- include('partials/footer') %>
+</body>
+</html>

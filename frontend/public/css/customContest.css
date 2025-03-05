@@ -1,32 +1,161 @@
-/* customContest.css */
+:root {
+  --primary-color: #2BAF67;
+  --secondary-color: #1C2B2D;
+  --background-light: #f4f7f6;
+  --background-dark: #e9edef;
+  --text-color: #333;
+  --input-border-color: #d1d8dc;
+}
 
-.container {
-    max-width: 600px;
-    margin: 2rem auto;
-    padding: 2rem;
-    background: linear-gradient(135deg, #fdfbfb, #f0f0f0);
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+body {
+  background-color: var(--background-light);
+  font-family: 'Inter', 'Segoe UI', Roboto, sans-serif;
+  line-height: 1.6;
+  color: var(--text-color);
+}
+
+.custom-contest-container {
+  max-width: 700px;
+  margin: 4rem auto;
+  padding: 2.5rem 3rem;
+  background: linear-gradient(135deg, 
+    rgba(255, 255, 255, 0.9) 0%, 
+    rgba(240, 249, 245, 0.7) 100%
+  );
+  border-radius: 15px;
+  box-shadow: 
+    0 15px 35px rgba(0, 0, 0, 0.05),
+    0 5px 15px rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(209, 213, 219, 0.3);
+  transition: all 0.3s ease;
+}
+
+.custom-contest-container:hover {
+  box-shadow: 
+    0 20px 40px rgba(0, 0, 0, 0.08),
+    0 8px 20px rgba(0, 0, 0, 0.08);
+  transform: translateY(-5px);
+}
+
+.custom-contest-container h1 {
+  text-align: center;
+  margin-bottom: 2rem;
+  font-size: 2.2rem;
+  color: var(--secondary-color);
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  position: relative;
+}
+
+.custom-contest-container h1::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 4px;
+  background: linear-gradient(90deg, 
+    transparent, 
+    var(--primary-color), 
+    transparent
+  );
+  border-radius: 10px;
+}
+
+.custom-contest-form {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.custom-contest-form .form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.custom-contest-form label {
+  font-weight: 600;
+  margin-bottom: 0.6rem;
+  color: var(--secondary-color);
+  font-size: 0.95rem;
+  transition: color 0.3s ease;
+}
+
+.custom-contest-form input[type="text"],
+.custom-contest-form input[type="number"],
+.custom-contest-form select {
+  padding: 0.9rem 1.1rem;
+  border: 1.5px solid var(--input-border-color);
+  border-radius: 8px;
+  font-size: 1rem;
+  background-color: white;
+  transition: 
+    border-color 0.3s ease, 
+    box-shadow 0.3s ease;
+}
+
+.custom-contest-form input[type="text"]:focus,
+.custom-contest-form input[type="number"]:focus,
+.custom-contest-form select:focus {
+  border-color: var(--primary-color);
+  outline: none;
+  box-shadow: 
+    0 0 0 3px rgba(43, 175, 103, 0.15);
+}
+
+.custom-contest-form input[type="text"]::placeholder,
+.custom-contest-form input[type="number"]::placeholder {
+  color: #9ca3af;
+  opacity: 0.7;
+}
+
+.custom-contest-form button.btn-green {
+  align-self: center;
+  padding: 0.9rem 2.5rem;
+  background: linear-gradient(
+    135deg, 
+    var(--primary-color), 
+    #3ac16c
+  );
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.custom-contest-form button.btn-green:hover {
+  background: linear-gradient(
+    135deg, 
+    #279d5f, 
+    #32b461
+  );
+  transform: translateY(-3px);
+  box-shadow: 
+    0 7px 14px rgba(50, 50, 93, 0.1), 
+    0 3px 6px rgba(0, 0, 0, 0.08);
+}
+
+.custom-contest-form button.btn-green:active {
+  transform: translateY(-1px);
+  box-shadow: 
+    0 4px 6px rgba(50, 50, 93, 0.05), 
+    0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+@media (max-width: 600px) {
+  .custom-contest-container {
+    margin: 2rem 1rem;
+    padding: 2rem 1.5rem;
   }
-  
-  .container-form {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
+
+  .custom-contest-container h1 {
+    font-size: 1.8rem;
   }
-  
-  .container-form label {
-    font-weight: bold;
-    color: #333;
-  }
-  
-  .container-form input {
-    padding: 0.6rem;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-  }
-  
-  
-  
-  
-  
+}

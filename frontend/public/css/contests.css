@@ -1,148 +1,269 @@
-/* Container for the entire page content */
-.container {
-    max-width: 1200px;
-    margin: 2rem auto;
-    padding: 1rem;
-    background: linear-gradient(135deg, #ffffff, #f9f9f9);
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  }
-  
-  /* Flex container for contests page */
-  .contests-page {
-    display: flex;
-    gap: 2rem;
-    flex-wrap: wrap;
-  }
-  
-  /* Left column: Contest Listings */
-  .contests-list {
-    flex: 2;
-    min-width: 300px;
-  }
-  
-  .contests-list h1 {
-    text-align: left;
-    font-size: 2rem;
-    margin-bottom: 1rem;
-    color: #1C2B2D;
-  }
-  
-  .contests-list section {
-    margin-bottom: 2rem;
-  }
-  
-  .contests-list h2 {
-    color: #1C2B2D;
-    border-bottom: 2px solid #2BAF67;
-    padding-bottom: 0.3rem;
-    margin-bottom: 0.8rem;
-  }
-  
-  .contest-list {
-    list-style: none;
-    padding: 0;
-  }
-  
-  .contest-list li {
-    padding: 0.8rem;
-    margin-bottom: 0.5rem;
-    background: linear-gradient(135deg, #fff, #fefefe);
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-  }
-  
-  .contest-list li:hover {
-    transform: scale(1.02);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  }
-  
-  .contest-list a {
-    font-size: 1.1rem;
-    font-weight: bold;
-    text-decoration: none;
-    color: #1C2B2D;
-    transition: color 0.3s ease;
-  }
-  
-  .contest-list a:hover {
-    color: #2BAF67;
-    text-decoration: underline;
-  }
-  
-  .contest-list span {
-    font-size: 0.9rem;
-    color: #555;
-  }
-  
-  /* Right column: Custom Contest Panel */
-  .custom-contest-panel {
-    flex: 1;
-    min-width: 250px;
-    padding: 1.5rem;
-    background: linear-gradient(135deg, #f6f9fc, #e9f0f5);
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
-    text-align: center;
-  }
-  
-  .custom-contest-panel h2 {
-    color: #1C2B2D;
-    margin-bottom: 1rem;
-  }
-  
-  .custom-contest-panel p {
-    color: #555;
-    margin-bottom: 1.5rem;
-    font-size: 1rem;
-  }
-  
-  /* Button Styling for .btn-green */
-  .btn-green {
-    background: linear-gradient(45deg, #2BAF67, #3ac16c);
-    color: #fff;
-    border: none;
-    padding: 0.8rem 1.5rem;
-    font-size: 1rem;
-    cursor: pointer;
-    border-radius: 5px;
-    text-decoration: none;
-    transition: background 0.3s ease;
-  }
-  
-  .btn-green:hover {
-    background: linear-gradient(45deg, #279d5f, #32b461);
-  }
-  
+/* Updated Contests Page CSS with Modern Design */
+:root {
+  --primary-color: #2BAF67;
+  --secondary-color: #1C2B2D;
+  --accent-color: #3ac16c;
+  --background-light: #f4f7f6;
+  --text-primary: #1C2B2D;
+  --text-secondary: #555;
+  --white: #ffffff;
+}
 
-  /* Pagination Container */
+* {
+  box-sizing: border-box;
+  transition: all 0.3s ease;
+}
+
+body {
+  background-color: var(--background-light);
+  font-family: 'Inter', 'Segoe UI', Roboto, sans-serif;
+  line-height: 1.6;
+  color: var(--text-primary);
+}
+
+/* Container Styling */
+.container {
+  max-width: 1300px;
+  margin: 3rem auto;
+  padding: 2rem;
+  background: linear-gradient(
+    135deg, 
+    rgba(255, 255, 255, 0.9) 0%, 
+    rgba(240, 249, 245, 0.7) 100%
+  );
+  border-radius: 15px;
+  box-shadow: 
+    0 20px 40px rgba(0, 0, 0, 0.05),
+    0 15px 25px rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(209, 213, 219, 0.3);
+  overflow: hidden;
+}
+
+/* Contests Page Layout */
+.contests-page {
+  display: flex;
+  gap: 2.5rem;
+  flex-wrap: wrap;
+  perspective: 1000px;
+}
+
+/* Left Column: Contest Listings */
+.contests-list {
+  flex: 3;
+  min-width: 400px;
+}
+
+.contests-list h1 {
+  text-align: left;
+  font-size: 2.5rem;
+  margin-bottom: 1.5rem;
+  color: var(--secondary-color);
+  position: relative;
+  letter-spacing: -1px;
+}
+
+.contests-list h1::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 0;
+  width: 80px;
+  height: 4px;
+  background: linear-gradient(
+    90deg, 
+    var(--primary-color), 
+    var(--accent-color)
+  );
+  border-radius: 10px;
+}
+
+.contests-list section {
+  margin-bottom: 2.5rem;
+  background: linear-gradient(
+    135deg, 
+    rgba(255, 255, 255, 0.8) 0%, 
+    rgba(250, 250, 250, 0.6) 100%
+  );
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 
+    0 10px 25px rgba(0, 0, 0, 0.05);
+}
+
+.contests-list h2 {
+  color: var(--secondary-color);
+  border-bottom: 3px solid var(--primary-color);
+  padding-bottom: 0.5rem;
+  margin-bottom: 1rem;
+  font-size: 1.4rem;
+}
+
+.contest-list {
+  list-style: none;
+  padding: 0;
+}
+
+.contest-list li {
+  padding: 1rem;
+  margin-bottom: 0.8rem;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 
+    0 4px 10px rgba(0, 0, 0, 0.05);
+  transition: 
+    transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+    box-shadow 0.3s ease;
+  will-change: transform;
+}
+
+.contest-list li:hover {
+  transform: scale(1.03) translateY(-5px) rotateX(2deg);
+  box-shadow: 
+    0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.contest-list a {
+  font-size: 1.1rem;
+  font-weight: 600;
+  text-decoration: none;
+  color: var(--secondary-color);
+  position: relative;
+  display: inline-block;
+}
+
+.contest-list a::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: -3px;
+  left: 0;
+  background-color: var(--primary-color);
+  transition: width 0.3s ease;
+}
+
+.contest-list a:hover::after {
+  width: 100%;
+}
+
+.contest-list span {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  opacity: 0.8;
+}
+
+/* Right Column: Custom Contest Panel */
+.custom-contest-panel {
+  flex: 1;
+  min-width: 300px;
+  padding: 2rem;
+  background: linear-gradient(
+    135deg, 
+    #2BAF67 0%, 
+    #3ac16c 100%
+  );
+  border-radius: 12px;
+  color: white;
+  text-align: center;
+  box-shadow: 
+    0 10px 25px rgba(43, 175, 103, 0.2);
+  transition: transform 0.2s ease;
+}
+
+.custom-contest-panel:hover {
+  transform: translateY(-5px);
+}
+
+.custom-contest-panel h2 {
+  color: white;
+  margin-bottom: 1rem;
+  font-size: 1.8rem;
+  font-weight: 600;
+}
+
+.custom-contest-panel p {
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 1.5rem;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.btn-green {
+  display: inline-block;
+  background: white;
+  color: #2BAF67;
+  border: none;
+  padding: 0.9rem 2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: 8px;
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: 
+    background-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.btn-green:hover {
+  background: #f0f0f0;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Pagination Styling */
 .pagination {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 1rem;
-    margin-top: 1.5rem;
-    font-family: "Open Sans", sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5rem;
+  margin-top: 2.5rem;
+  padding: 1rem;
+  background: linear-gradient(
+    135deg, 
+    rgba(255, 255, 255, 0.8) 0%, 
+    rgba(250, 250, 250, 0.6) 100%
+  );
+  border-radius: 10px;
+  box-shadow: 
+    0 10px 25px rgba(0, 0, 0, 0.05);
+}
+
+.pagination-link {
+  padding: 0.8rem 1.5rem;
+  background: var(--primary-color);
+  color: white;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: 
+    background 0.3s ease,
+    transform 0.3s ease;
+  font-weight: 600;
+}
+
+.pagination-link:hover {
+  background: var(--accent-color);
+  transform: scale(1.05);
+}
+
+.pagination-info {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .container {
+    margin: 1rem;
+    padding: 1rem;
   }
-  
-  /* Pagination Links */
-  .pagination-link {
-    padding: 0.5rem 1rem;
-    background: linear-gradient(45deg, #2BAF67, #3ac16c);
-    color: #fff;
-    border-radius: 5px;
-    text-decoration: none;
-    transition: background 0.3s ease;
+
+  .contests-page {
+    flex-direction: column;
   }
-  
-  .pagination-link:hover {
-    background: linear-gradient(45deg, #279d5f, #32b461);
+
+  .contests-list, 
+  .custom-contest-panel {
+    min-width: 100%;
   }
-  
-  /* Pagination Info */
-  .pagination-info {
-    font-size: 1rem;
-    color: #333;
-  }
-  
+}

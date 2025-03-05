@@ -9,22 +9,37 @@
 </head>
 <body>
   <%- include('partials/header') %>
-  <div class="container">
+  <div class="container custom-contest-container">
     <h1>Create Custom Contest</h1>
     <form action="/contests/custom" method="POST" class="custom-contest-form">
-      <label for="contestName">Contest Name (Optional):</label>
-      <input type="text" name="contestName" id="contestName">
-      
-      <label for="duration">Duration (minutes):</label>
-      <input type="number" name="duration" id="duration" required>
-      
-      <label for="numProblems">Number of Problems:</label>
-      <input type="number" name="numProblems" id="numProblems" required>
-      
-      <!-- We will use a simple approach: let the user enter ratings separated by commas -->
-      <label for="ratings">Problem Ratings (comma-separated, e.g., 1000,1200,1300):</label>
-      <input type="text" name="ratings" id="ratings" required>
-      
+      <div class="form-group">
+        <label for="contestName">Contest Name (Optional):</label>
+        <input type="text" name="contestName" id="contestName" placeholder="Enter contest name...">
+      </div>
+
+      <div class="form-group">
+        <label for="contestType">Contest Type:</label>
+        <select name="contestType" id="contestType" required>
+          <option value="personal">Personal (Practice)</option>
+          <option value="group">Group (Competitive)</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="duration">Duration (minutes):</label>
+        <input type="number" name="duration" id="duration" required placeholder="e.g. 60">
+      </div>
+
+      <div class="form-group">
+        <label for="numProblems">Number of Problems:</label>
+        <input type="number" name="numProblems" id="numProblems" required placeholder="e.g. 5">
+      </div>
+
+      <div class="form-group">
+        <label for="ratings">Problem Ratings (comma-separated, e.g., 1000,1200,1300):</label>
+        <input type="text" name="ratings" id="ratings" required placeholder="Enter ratings separated by commas">
+      </div>
+
       <button type="submit" class="btn-green">Generate Contest</button>
     </form>
   </div>
