@@ -18,8 +18,8 @@
       <!-- Filter form -->
       <form action="/problems" method="GET" class="filter-form">
         <label for="minRating">Rating Range:</label>
-        <input type="number" name="minRating" id="minRating" placeholder="Min" value="<%= minRating %>">
-        <input type="number" name="maxRating" id="maxRating" placeholder="Max" value="<%= maxRating %>">
+        <input type="text" name="minRating" id="minRating" placeholder="Min" value="<%= minRating %>">
+        <input type="text" name="maxRating" id="maxRating" placeholder="Max" value="<%= maxRating %>">
         <label for="tag">Tag:</label>
         <select name="tag" id="tag">
           <option value="" <% if (!tagFilter) { %> selected <% } %> >All</option>
