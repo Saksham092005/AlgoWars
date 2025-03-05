@@ -1,4 +1,3 @@
-<!-- frontend/views/dashboard.ejs -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,98 +5,187 @@
   <title>Devbits - Dashboard</title>
   <link rel="stylesheet" href="/css/style.css">
   <link rel="stylesheet" href="/css/dashboard.css">
-  <!-- Include Chart.js for the rating graph -->
+  <!-- Include Chart.js for graphs -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
+  <!-- 1. Navbar -->
   <%- include('partials/header', { user: user }) %>
 
   <div class="dashboard-container">
-    <h1>Welcome, <%= user.username %>!</h1>
-    
+    <!-- 2. Codeforces Profile Section -->
     <section class="profile-section">
-      <h2>Your Codeforces Profile</h2>
-      <div class="profile-stats">
-        <div class="profile-stat">
-          <h3>Handle</h3>
-          <p><%= userInfo.handle %></p>
+      <div class="profile-header">
+        <div class="profile-avatar">
+          <img src="<%= userInfo.titlePhoto %>" alt="Profile" onerror="this.src='/default-avatar.png'">
         </div>
-        <div class="profile-stat">
-          <h3>Rating</h3>
-          <p><%= userInfo.rating %></p>
-        </div>
-        <div class="profile-stat">
-          <h3>Rank</h3>
-          <p><%= userInfo.rank %></p>
+        <div class="profile-info">
+          <h2><%= userInfo.handle %></h2>
+          <div class="profile-stats">
+            <div class="stat">
+              <span class="stat-value"><%= userInfo.rating %></span>
+              <span class="stat-label">Rating</span>
+            </div>
+            <div class="stat">
+              <span class="stat-value"><%= userInfo.rank %></span>
+              <span class="stat-label">Rank</span>
+            </div>
+          </div>
         </div>
       </div>
     </section>
     
-    <section class="contest-history">
-      <h2>Contest History</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Contest Name</th>
-            <th>Rank</th>
-            <th>Rating Change</th>
-            <th>New Rating</th>
-            <th>Date</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% contestHistory.forEach(contest => { %>
-            <tr>
-              <td><%= contest.contestName %></td>
-              <td><%= contest.rank %></td>
-              <td><%= contest.newRating - contest.oldRating %></td>
-              <td><%= contest.newRating %></td>
-              <td><%= new Date(contest.ratingUpdateTimeSeconds * 1000).toLocaleDateString() %></td>
-            </tr>
-          <% }) %>
-        </tbody>
-      </table>
+    <!-- 3. Full-Width Rating Graph Section -->
+    <section class="analytics-card rating-fullwidth">
+      <h3>Rating Over Time</h3>
+      <canvas id="ratingChart"></canvas>
     </section>
-    
-    <!-- Performance Analytics Section -->
-    <section class="performance-analytics">
-      <h2>Performance Analytics</h2>
-      
-      <!-- 1. Rating Graph -->
-      <div class="rating-graph">
-        <h3>Rating Over Time</h3>
-        <canvas id="ratingChart"></canvas>
+
+    <!-- 4. Horizontal Activity Tracker (Contribution Graph) -->
+    <% 
+      // Convert streakData (array of { date, active }) into a Set of activeDays.
+      const activeDays = new Set();
+      streakData.forEach(d => { if (d.active) activeDays.add(d.date); });
+    %>
+    <section class="analytics-card contribution-fullwidth">
+      <h3>Contribution Streak</h3>
+      <div class="contribution-graph">
+        <% 
+          // Wrap this logic in an IIFE to avoid variable conflicts.
+          (function(){
+            const graphToday = new Date();
+            const graphYearAgo = new Date(graphToday);
+            graphYearAgo.setDate(graphToday.getDate() - 365);
+            
+            const weeks = [];
+            let currentDate = new Date(graphYearAgo);
+            
+            for (let w = 0; w < 53; w++) {
+              const week = [];
+              for (let d = 0; d < 7; d++) {
+                const thisDate = new Date(currentDate);
+                const isoDate = thisDate.toISOString().split('T')[0];
+                const isActive = activeDays.has(isoDate);
+                week.push({
+                  date: isoDate,
+                  active: isActive,
+                  month: thisDate.getMonth()
+                });
+                currentDate.setDate(currentDate.getDate() + 1);
+                if (currentDate > graphToday) break;
+              }
+              weeks.push(week);
+              if (currentDate > graphToday) break;
+            }
+            
+            // Expose the computed weeks to the template via locals
+            locals.weeksForGraph = weeks;
+          })();
+        %>
+
+        <!-- Month Labels Row -->
+        <div class="months-row">
+          <div class="spacer">&nbsp;</div>
+          <div class="weeks-row">
+            <% weeksForGraph.forEach((week, wIndex) => {
+                 const firstDay = week[0];
+                 let showMonthLabel = false;
+                 let monthName = '';
+                 if (firstDay) {
+                   const dayObj = new Date(firstDay.date);
+                   if (dayObj.getDate() <= 7 || wIndex === 0) {
+                     showMonthLabel = true;
+                     monthName = dayObj.toLocaleString('default', { month: 'short' });
+                   }
+                 }
+            %>
+              <div class="week-column">
+                <% if (showMonthLabel) { %>
+                  <div class="month-label"><%= monthName %></div>
+                <% } else { %>
+                  <div class="month-label">&nbsp;</div>
+                <% } %>
+              </div>
+            <% }); %>
+          </div>
+        </div>
+
+        <!-- The Grid of Weeks -->
+        <div class="weeks-grid">
+          <!-- Day-of-week labels -->
+          <div class="days-labels">
+            <% ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].forEach(dow => { %>
+              <div class="day-label"><%= dow %></div>
+            <% }); %>
+          </div>
+          <!-- Week columns -->
+          <div class="weeks-row">
+            <% weeksForGraph.forEach(week => { %>
+              <div class="week-column">
+                <% week.forEach(cell => { %>
+                  <div class="day-cell <%= cell.active ? 'active' : '' %>" title="<%= cell.date %>"></div>
+                <% }); %>
+              </div>
+            <% }); %>
+          </div>
+        </div>
+
+        <!-- Streak Info Footer -->
+        <div class="streak-footer">
+          <p>Current Streak: <span class="streak-number"><%= currentStreak %></span> days</p>
+          <div class="legend">
+            <span>Less</span>
+            <div class="legend-box level-1"></div>
+            <div class="legend-box level-2"></div>
+            <div class="legend-box level-3"></div>
+            <div class="legend-box level-4"></div>
+            <div class="legend-box level-5"></div>
+            <span>More</span>
+          </div>
+        </div>
       </div>
-      
-      <!-- 2. Streak Tracker -->
-      <div class="streak-tracker">
-        <h3>Streak Tracker</h3>
-        <p>Current Active Streak: <strong><%= currentStreak %> days</strong></p>
-        <p>Active Days:</p>
-        <ul class="active-days">
-          <% activeDays.forEach(day => { %>
-            <li><%= day %></li>
-          <% }) %>
-        </ul>
-      </div>
-      
-      <!-- 3. Weak Topics -->
-      <div class="weak-topics">
+    </section>
+
+    <!-- 5. Last Section: Two Columns (Weak Topics & Recent Contests) -->
+    <section class="last-section-grid">
+      <!-- Left: Weak Topics Bar Graph -->
+      <div class="analytics-card weak-topics">
         <h3>Weak Topics</h3>
-        <ul>
-          <% Object.keys(weakTopics).forEach(tag => { %>
-            <li><%= tag %> - <%= weakTopics[tag] %> wrong submissions</li>
-          <% }) %>
-        </ul>
+        <canvas id="weakTopicsChart"></canvas>
+      </div>
+
+      <!-- Right: Recent Contests -->
+      <div class="analytics-card contest-history">
+        <h3>Recent Contests</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Contest</th>
+              <th>Rank</th>
+              <th>Rating</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% contestHistory.slice(-5).reverse().forEach(contest => { %>
+              <tr>
+                <td><%= contest.contestName %></td>
+                <td><%= contest.rank %></td>
+                <td><%= contest.newRating %></td>
+                <td><%= new Date(contest.ratingUpdateTimeSeconds * 1000).toLocaleDateString() %></td>
+              </tr>
+            <% }); %>
+          </tbody>
+        </table>
       </div>
     </section>
   </div>
 
   <%- include('partials/footer') %>
 
-  <!-- Chart.js script to render the rating graph -->
+  <!-- Charts Script -->
   <script>
-    // Prepare data for the rating graph from contestHistory
+    // 1) Rating Chart
     const contests = <%- JSON.stringify(contestHistory) %>;
     const labels = contests.map(contest => {
       const d = new Date(contest.ratingUpdateTimeSeconds * 1000);
@@ -105,8 +193,8 @@
     });
     const ratings = contests.map(contest => contest.newRating);
 
-    const ctx = document.getElementById('ratingChart').getContext('2d');
-    const ratingChart = new Chart(ctx, {
+    const ratingCtx = document.getElementById('ratingChart').getContext('2d');
+    new Chart(ratingCtx, {
       type: 'line',
       data: {
         labels: labels,
@@ -120,13 +208,45 @@
         }]
       },
       options: {
+        responsive: true,
         scales: {
-          x: {
-            title: { display: true, text: 'Date' }
+          x: { 
+            display: true, 
+            title: { display: true, text: 'Contests' }
           },
-          y: {
-            title: { display: true, text: 'Rating' },
-            beginAtZero: false
+          y: { 
+            beginAtZero: false,
+            title: { display: true, text: 'Rating' }
+          }
+        }
+      }
+    });
+
+    // 2) Weak Topics Chart
+    const weakTopics = <%- JSON.stringify(weakTopics) %>;
+    const topicLabels = Object.keys(weakTopics);
+    const topicValues = Object.values(weakTopics);
+
+    const weakTopicsCtx = document.getElementById('weakTopicsChart').getContext('2d');
+    new Chart(weakTopicsCtx, {
+      type: 'bar',
+      data: {
+        labels: topicLabels,
+        datasets: [{
+          label: 'Wrong Submissions',
+          data: topicValues,
+          backgroundColor: 'rgba(255, 99, 132, 0.6)',
+          borderColor: 'rgba(255, 99, 132, 1)',
+          borderWidth: 1
+        }]
+      },
+      options: {
+        indexAxis: 'y',
+        responsive: true,
+        scales: {
+          x: { 
+            beginAtZero: true,
+            title: { display: true, text: 'Wrong Submissions' }
           }
         }
       }

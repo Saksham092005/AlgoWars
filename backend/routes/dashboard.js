@@ -3,7 +3,6 @@ const axios = require('axios');
 const router = express.Router();
 const User = require('../models/User');
 const auth = require('../middleware/auth');  
-const moment = require('moment');  // (Optional, if you want nicer date handling)
 
 router.get('/dashboard', auth, async (req, res) => {
   try {
@@ -18,7 +17,7 @@ router.get('/dashboard', auth, async (req, res) => {
 
     const codeforcesHandle = user.codeforcesHandle;
 
-    // Fetch contest history from Codeforces
+    // Fetch contest history and user info from Codeforces
     let contestHistory = [];
     let userInfo = {};
     try {
@@ -33,59 +32,77 @@ router.get('/dashboard', auth, async (req, res) => {
       return res.status(500).send("Failed to fetch Codeforces data. Check if your handle is correct.");
     }
 
-    // -------------------------------
     // Fetch submissions for performance analytics
-    // -------------------------------
     let submissions = [];
-    let activeDays = [];
-    let currentStreak = 0;
+    let activeDays = new Set();
+    let streakData = [];
     let weakTopics = {};
+    let currentStreak = 0;
+
     try {
       const subsResponse = await axios.get(`https://codeforces.com/api/user.status?handle=${codeforcesHandle}`);
       submissions = subsResponse.data.result;
       
-      // Compute activeDays: a Set of date strings (YYYY-MM-DD)
-      const daySet = new Set();
-      submissions.forEach(sub => {
-          const date = new Date(sub.creationTimeSeconds * 1000);
-          const dateStr = date.toISOString().split('T')[0];
-          daySet.add(dateStr);
+      // Compute active days from submissions (YYYY-MM-DD format)
+      const allDates = submissions.map(sub => {
+        const date = new Date(sub.creationTimeSeconds * 1000);
+        return date.toISOString().split('T')[0];
       });
-      activeDays = Array.from(daySet).sort(); // sorted ascending
-
-      // Compute current streak:
-      // We'll start from today and count backwards until we find a missing active day.
-      const today = new Date();
-      let streak = 0;
-      let currentDate = new Date(today.toISOString().split('T')[0]); // start at today's date (YYYY-MM-DD)
-      while (daySet.has(currentDate.toISOString().split('T')[0])) {
-          streak++;
-          currentDate.setDate(currentDate.getDate() - 1);
-      }
-      currentStreak = streak;
+      allDates.forEach(date => activeDays.add(date));
       
-      // Compute weak topics: count frequency of tags for wrong submissions
-      // Consider submissions with verdict defined and not "OK"
+      // Generate streak data for the past year
+      const today = new Date();
+      const oneYearAgo = new Date(today);
+      oneYearAgo.setFullYear(today.getFullYear() - 1);
+      
+      let currentDate = new Date(oneYearAgo);
+      while (currentDate <= today) {
+        const dateStr = currentDate.toISOString().split('T')[0];
+        streakData.push({
+          date: dateStr,
+          active: activeDays.has(dateStr)
+        });
+        currentDate.setDate(currentDate.getDate() + 1);
+      }
+      
+      // Compute current streak (count consecutive days active from today backwards)
+      let checkDate = new Date(today);
+      while (activeDays.has(checkDate.toISOString().split('T')[0])) {
+        currentStreak++;
+        checkDate.setDate(checkDate.getDate() - 1);
+      }
+      
+      // Compute weak topics by counting wrong submissions per tag
       const wrongSubs = submissions.filter(sub => sub.verdict && sub.verdict !== "OK");
       wrongSubs.forEach(sub => {
-          if (sub.problem && sub.problem.tags) {
-              sub.problem.tags.forEach(tag => {
-                  weakTopics[tag] = (weakTopics[tag] || 0) + 1;
-              });
-          }
+        if (sub.problem && sub.problem.tags) {
+          sub.problem.tags.forEach(tag => {
+            weakTopics[tag] = (weakTopics[tag] || 0) + 1;
+          });
+        }
       });
     } catch (subErr) {
       console.error("Error fetching submissions:", subErr.message);
+      streakData = [];
+      currentStreak = 0;
     }
 
-    // Render dashboard with additional analytics data:
+    // Sort weak topics by number of wrong submissions
+    const sortedWeakTopics = Object.entries(weakTopics)
+      .sort((a, b) => b[1] - a[1])
+      .reduce((obj, [key, value]) => {
+        obj[key] = value;
+        return obj;
+      }, {});
+
+    // Render the dashboard view with all analytics data
     res.render('dashboard', { 
       contestHistory, 
       userInfo, 
       user,
-      activeDays,         // Array of active day strings (YYYY-MM-DD)
-      currentStreak,      // Number of consecutive days active (ending today)
-      weakTopics          // Object with tag frequencies for wrong submissions
+      streakData,         // Array of { date, active } objects for the past year
+      currentStreak,      // Number of consecutive active days
+      weakTopics: sortedWeakTopics  // Weak topics sorted by wrong submission counts
     });
   } catch (err) {
     console.error("Dashboard Error:", err);
